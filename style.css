@@ -1441,7 +1441,11 @@ button { font-family: inherit; }
   }
   .navbar_menu.open { display: flex; }
   .navbar_menu-links { flex-direction: column; }
-  .navbar_link { padding: 0.75rem 1rem; }
+  /* The mobile dropdown always has a light (pearl) background, so the links
+     and search icon must be dark regardless of the navbar's transparent state. */
+  .navbar_link { padding: 0.75rem 1rem; color: var(--dark-blue); }
+  .navbar_link:hover { background: rgba(21,58,67,0.06); color: var(--blue); }
+  .navbar_search { color: var(--dark-blue); }
   .navbar_menu-buttons { margin-left: 0; margin-top: 0.5rem; }
 
   .section_hero { margin-left: 0.5rem; margin-right: 0.5rem; }
