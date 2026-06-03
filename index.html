@@ -240,11 +240,15 @@
         <a href="#" data-page="contact"                         class="navbar_link">Contact</a>
       </div>
       <div class="navbar_menu-buttons">
-        <button class="navbar_search" aria-label="Search">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </button>
+        <div class="nav-search" id="nav-search">
+          <input type="text" id="nav-search-input" class="nav-search__input" placeholder="Search the site…" autocomplete="off" aria-label="Search the site"/>
+          <button class="navbar_search" id="nav-search-btn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          <div class="nav-search__results" id="nav-search-results"></div>
+        </div>
       </div>
     </nav>
   </div>
@@ -943,12 +947,105 @@ document.getElementById('ins-search').addEventListener('input', function() {
   else filterBtns[0].classList.add('active');
 });
 
-/* ══ ARTICLE CARD LINKS ══ */
+/* ══ ARTICLE LINKS (shared by card clicks + navbar search) ══ */
 const articleLinks = [
   'insight-youth-safety.html','insight-esg-smes.html','insight-digital-health.html',
   'insight-tech-policy.html','insight-annual-report.html','insight-egovernment.html',
   'insight-cyberbullying.html','insight-esg-smes.html'
 ];
+
+/* ══ NAVBAR SEARCH (opens in place) ══ */
+(function () {
+  const wrap    = document.getElementById('nav-search');
+  const btn     = document.getElementById('nav-search-btn');
+  const input   = document.getElementById('nav-search-input');
+  const results = document.getElementById('nav-search-results');
+  if (!wrap || !btn || !input || !results) return;
+
+  // Build a small searchable index: main pages + every insight article title.
+  const index = [
+    { title: 'About FARO',          type: 'Page', go: () => navigate('home', 'mission')  },
+    { title: 'Projects',            type: 'Page', go: () => navigate('home', 'projects')  },
+    { title: 'Insights',            type: 'Page', go: () => navigate('insights')          },
+    { title: 'Knowledge Hub',       type: 'Page', go: () => navigate('hub')               },
+    { title: 'Careers',             type: 'Page', go: () => navigate('careers')           },
+    { title: 'Our Team',            type: 'Page', go: () => navigate('home', 'team')       },
+    { title: 'Contact',             type: 'Page', go: () => navigate('contact')           },
+  ];
+  cards.forEach((card, i) => {
+    const t = card.querySelector('.ins-card__title');
+    if (!t) return;
+    const link = articleLinks[i];
+    index.push({
+      title: t.textContent.trim(),
+      type: 'Article',
+      go: () => { link ? (location.href = link) : navigate('insights'); }
+    });
+  });
+
+  let activeIdx = -1, matches = [];
+
+  function render() {
+    const q = input.value.toLowerCase().trim();
+    matches = q ? index.filter(it => it.title.toLowerCase().includes(q)).slice(0, 7) : [];
+    activeIdx = -1;
+    if (!q) { results.classList.remove('show'); results.innerHTML = ''; return; }
+    if (!matches.length) {
+      results.innerHTML = '<div class="nav-search__empty">No results for “' + input.value.trim() + '”</div>';
+    } else {
+      results.innerHTML = matches.map((m, i) =>
+        '<div class="nav-search__item" data-i="' + i + '">' +
+          '<span class="nav-search__item-title">' + m.title + '</span>' +
+          '<span class="nav-search__item-type">' + m.type + '</span>' +
+        '</div>'
+      ).join('');
+    }
+    results.classList.add('show');
+  }
+
+  function choose(i) {
+    const m = matches[i];
+    if (!m) return;
+    close();
+    m.go();
+  }
+
+  function open()  { wrap.classList.add('open'); setTimeout(() => input.focus(), 60); }
+  function close() {
+    wrap.classList.remove('open');
+    results.classList.remove('show');
+    input.value = ''; results.innerHTML = ''; matches = []; activeIdx = -1;
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    wrap.classList.contains('open') ? close() : open();
+  });
+  input.addEventListener('input', render);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { close(); }
+    else if (e.key === 'Enter') { choose(activeIdx >= 0 ? activeIdx : 0); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!matches.length) return;
+      activeIdx = e.key === 'ArrowDown'
+        ? (activeIdx + 1) % matches.length
+        : (activeIdx - 1 + matches.length) % matches.length;
+      results.querySelectorAll('.nav-search__item').forEach((el, i) =>
+        el.classList.toggle('active', i === activeIdx));
+    }
+  });
+  results.addEventListener('click', (e) => {
+    const item = e.target.closest('.nav-search__item');
+    if (item) choose(parseInt(item.dataset.i, 10));
+  });
+  // Click outside closes the search
+  document.addEventListener('click', (e) => {
+    if (wrap.classList.contains('open') && !wrap.contains(e.target)) close();
+  });
+})();
+
+/* ══ ARTICLE CARD LINKS ══ */
 cards.forEach((card, i) => {
   if (articleLinks[i]) {
     card.style.cursor = 'pointer';
