@@ -1486,16 +1486,24 @@ button { font-family: inherit; }
   .navbar_link { padding: 0.75rem 1rem; color: var(--dark-blue); }
   .navbar_link:hover { background: rgba(21,58,67,0.06); color: var(--blue); }
   .navbar_search { color: var(--dark-blue); }
-  /* Center the search button in the mobile dropdown. The input is taken out of
-     flow so it can't offset the icon; it opens as a full-width bar below it. */
+  /* Mobile dropdown: stack the search as a column inside the menu box so nothing
+     floats over the page. Icon sits centered on its own row; the input collapses
+     to zero height when closed and expands in-flow below the icon when open. */
   .navbar_menu-buttons { margin-left: 0; margin-top: 0.5rem; display: flex; justify-content: center; }
-  .nav-search { justify-content: center; }
+  .nav-search { flex-direction: column; align-items: center; width: 100%; }
+  .nav-search .navbar_search { order: 0; align-self: center; }
   .nav-search__input {
-    position: absolute; top: calc(100% + 8px); left: 0; right: 0;
-    width: 100%; margin: 0; padding: 0 0.9rem; box-sizing: border-box;
+    position: static; order: 1; width: 100%; max-width: 280px; height: 0; min-height: 0;
+    margin: 0 auto; padding: 0; border-width: 0; box-sizing: border-box;
+    overflow: hidden; box-shadow: none; text-align: center;
   }
-  .nav-search.open .nav-search__input { width: 100%; padding: 0 0.9rem; }
-  .nav-search__results { width: 100%; left: 0; right: 0; top: calc(100% + 54px); }
+  .nav-search.open .nav-search__input {
+    height: 42px; margin: 0.6rem auto 0; padding: 0 0.9rem; border-width: 1px;
+  }
+  .nav-search__results {
+    position: static; order: 2; width: 100%; max-width: 280px; margin: 0.5rem auto 0;
+    box-shadow: none;
+  }
 
   .section_hero { margin-left: 0.5rem; margin-right: 0.5rem; }
   .hero_cols { grid-template-columns: 1fr; }
