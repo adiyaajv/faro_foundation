@@ -34,7 +34,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   font-family: 'Inter', sans-serif;
   background: var(--pearl);
@@ -171,26 +171,28 @@ button { font-family: inherit; }
 .navbar_component.scrolled .navbar_search:hover { background: rgba(21,58,67,0.08); }
 .navbar_component.navbar_component--solid .navbar_search:hover { background: rgba(21,58,67,0.08); }
 
-/* Inline navbar search (opens in place, no page change) */
+/* Navbar search — the field drops DOWN below the icon (absolute), so opening it
+   never widens the navbar or pushes the logo (important on tablet widths). */
 .nav-search { position: relative; display: flex; align-items: center; }
 .nav-search__input {
-  width: 0; opacity: 0; padding: 0; border: 1px solid transparent;
-  height: 38px; border-radius: var(--r8); margin-right: -38px;
-  background: rgba(255,255,255,0.95); color: var(--dark-blue);
+  position: absolute; top: calc(100% + 10px); right: 0;
+  width: 280px; height: 42px; padding: 0 0.95rem;
+  border: 1px solid var(--border); border-radius: var(--r8);
+  background: rgba(255,255,255,0.98); color: var(--dark-blue);
   font-size: 0.85rem; font-family: inherit; outline: none;
-  transition: width 0.28s ease, opacity 0.2s ease, padding 0.28s ease, margin 0.28s ease;
-  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(21,58,67,0.14);
+  opacity: 0; transform: translateY(-6px); pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 301;
 }
 .nav-search.open .nav-search__input {
-  width: 230px; opacity: 1; padding: 0 2.5rem 0 0.9rem;
-  margin-right: 0; border-color: var(--border);
-  box-shadow: 0 4px 18px rgba(21,58,67,0.12); pointer-events: auto;
+  opacity: 1; transform: translateY(0); pointer-events: auto;
 }
 .nav-search__input::placeholder { color: rgba(21,58,67,0.45); }
 .nav-search .navbar_search { position: relative; z-index: 1; }
 .nav-search.open .navbar_search { color: var(--dark-blue); }
 .nav-search__results {
-  display: none; position: absolute; top: calc(100% + 8px); right: 0;
+  display: none; position: absolute; top: calc(100% + 62px); right: 0;
   width: 320px; max-height: 360px; overflow-y: auto;
   background: var(--pearl); border: 1px solid var(--border);
   border-radius: var(--r12); box-shadow: 0 16px 40px rgba(21,58,67,0.16);
@@ -1533,6 +1535,9 @@ button { font-family: inherit; }
   /* Empower: stack on mobile */
   .empower_tab-component { flex-direction: column; }
   .empower_tab-menu      { width: 100%; }
+  /* The timer bar bleeds 36vw past its container (a desktop effect) which
+     overflows the page on mobile and creates a horizontal scroll / left gap. */
+  .empower_tab_timer     { width: 100%; }
   .empower_tab-content   { position: relative; inset: auto; width: 100%; justify-content: center; padding-top: 2rem; pointer-events: all; }
   .empower_card          { width: 100%; height: auto; min-height: 340px; }
   .empower_tab-container { padding-right: 0; justify-content: center; }
