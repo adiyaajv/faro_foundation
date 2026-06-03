@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FARO Foundation</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <style>
+    /* ── SPA routing ── */
+    .spa-page { display: none; }
+    .spa-page.active { display: block; }
+
+    /* ══ INSIGHTS ══ */
+    #page-insights .ins-hero {
+      background: radial-gradient(circle at 80% 10%, rgba(255,150,60,0.18), transparent 40%),
+        radial-gradient(circle at 12% 60%, rgba(255,100,20,0.10), transparent 38%),
+        linear-gradient(180deg, #fff9f0 0%, #fdf5e8 100%);
+      padding: calc(var(--nav-h) + 4rem) 0 3.5rem;
+    }
+    #page-insights .ins-hero__inner { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; flex-wrap:wrap; }
+    #page-insights .ins-hero__left  { max-width:600px; }
+    #page-insights .ins-hero__tag   { color:#c8521a; margin-bottom:0.75rem; }
+    #page-insights .ins-hero__h1    { color:var(--dark-blue); font-size:clamp(2.15rem,4.5vw,3.6rem); font-weight:800; line-height:1.1; letter-spacing:-0.02em; }
+    #page-insights .ins-hero__sub   { color:var(--muted); font-size:1rem; margin-top:1rem; line-height:1.75; }
+    #page-insights .ins-hero__stats { display:flex; gap:2rem; margin-top:2rem; }
+    #page-insights .ins-hero__stat-num { font-size:1.6rem; font-weight:800; color:var(--dark-blue); line-height:1; }
+    #page-insights .ins-hero__stat-lbl { font-size:0.75rem; color:var(--muted); margin-top:0.2rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+    #page-insights .ins-hero__search { display:flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.72); border:1px solid rgba(21,58,67,0.14); border-radius:var(--r8); padding:0.6rem 1rem; min-width:260px; }
+    #page-insights .ins-hero__search input { background:none; border:none; outline:none; color:var(--dark-blue); font-size:0.9rem; width:100%; }
+    #page-insights .ins-hero__search input::placeholder { color:rgba(21,58,67,0.45); }
+    .ins-featured { background:rgba(255,255,255,0.78); border:1px solid rgba(21,58,67,0.1); border-radius:var(--r16); overflow:hidden; display:grid; grid-template-columns:1fr 1fr; box-shadow:0 22px 60px rgba(21,58,67,0.075); margin:3rem 0 0; min-height:360px; }
+    @media(max-width:720px){.ins-featured{grid-template-columns:1fr;}}
+    .ins-featured__img { background:linear-gradient(180deg,rgba(21,58,67,0.06),rgba(21,58,67,0.18)),url('Pictures/Impact/481143899_654026450580453_5680787874299543442_n.jpg') center/cover no-repeat; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:2rem; min-height:280px; }
+    .ins-featured__badge { position:relative; z-index:1; display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.15); color:#fff; font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.85rem; border-radius:var(--r8); backdrop-filter:blur(4px); }
+    .ins-featured__body { padding:2.5rem; display:flex; flex-direction:column; justify-content:center; gap:1rem; }
+    .ins-featured__cat  { font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#c8521a; }
+    .ins-featured__title { font-size:1.45rem; font-weight:800; color:var(--dark-blue); line-height:1.3; }
+    .ins-featured__excerpt { font-size:0.95rem; color:rgba(21,58,67,0.65); line-height:1.75; }
+    .ins-featured__meta { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:0.5rem; }
+    .ins-featured__author { display:flex; align-items:center; gap:0.6rem; }
+    .ins-featured__avatar { width:2rem; height:2rem; border-radius:9999px; background:var(--dark-blue); color:#fff; font-size:0.75rem; font-weight:700; display:flex; align-items:center; justify-content:center; }
+    .ins-featured__author-name { font-size:0.85rem; font-weight:700; color:var(--dark-blue); }
+    .ins-featured__sep   { width:4px; height:4px; border-radius:50%; background:rgba(21,58,67,0.25); }
+    .ins-featured__date, .ins-featured__time { font-size:0.82rem; color:rgba(21,58,67,0.5); }
+    .ins-featured__cta { display:inline-flex; align-items:center; gap:6px; background:var(--dark-blue); color:#fff; font-size:0.85rem; font-weight:700; padding:0.65rem 1.4rem; border-radius:var(--r8); text-decoration:none; margin-top:0.75rem; width:fit-content; transition:background 0.2s; }
+    .ins-featured__cta:hover { background:#c8521a; }
+    .ins-filters { display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; padding:2.5rem 0 2rem; }
+    .ins-filter-btn { padding:0.45rem 1.1rem; border-radius:var(--r8); border:1.5px solid rgba(21,58,67,0.18); background:#fff; font-size:0.82rem; font-weight:600; color:rgba(21,58,67,0.65); cursor:pointer; transition:all 0.2s; }
+    .ins-filter-btn:hover  { border-color:#c8521a; color:#c8521a; }
+    .ins-filter-btn.active { background:#c8521a; color:#fff; border-color:#c8521a; }
+    .ins-layout { display:grid; grid-template-columns:1fr 300px; gap:3rem; align-items:start; padding-bottom:5rem; }
+    @media(max-width:900px){.ins-layout{grid-template-columns:1fr;}}
+    .ins-grid { display:flex; flex-direction:column; gap:1.5rem; }
+    .ins-card { background:#fff; border-radius:var(--r16); overflow:hidden; display:grid; grid-template-columns:180px 1fr; box-shadow:0 2px 16px rgba(21,58,67,0.07); transition:transform 0.22s ease,box-shadow 0.22s ease; text-decoration:none; }
+    .ins-card:hover { transform:translateY(-3px); box-shadow:0 10px 36px rgba(21,58,67,0.12); }
+    @media(max-width:560px){.ins-card{grid-template-columns:1fr;}}
+    .ins-card__thumb { display:flex; align-items:center; justify-content:center; font-size:0.82rem; font-weight:900; letter-spacing:0.08em; color:var(--dark-blue); min-height:140px; background:radial-gradient(circle at 24% 20%,rgba(126,212,234,0.26),transparent 38%),rgba(255,255,255,0.78); border-right:1px solid rgba(21,58,67,0.08); }
+    .ins-card__body { padding:1.4rem 1.6rem; display:flex; flex-direction:column; gap:0.5rem; }
+    .ins-card__top  { display:flex; align-items:center; gap:0.75rem; }
+    .ins-card__cat  { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:0.2rem 0.65rem; border-radius:var(--r8); background:rgba(200,82,26,0.09); color:#c8521a; }
+    .ins-card__read-time { font-size:0.75rem; color:rgba(21,58,67,0.45); font-weight:600; }
+    .ins-card__title { font-size:1.05rem; font-weight:800; color:var(--dark-blue); line-height:1.35; }
+    .ins-card__excerpt { font-size:0.88rem; color:rgba(21,58,67,0.6); line-height:1.7; flex:1; }
+    .ins-card__tags { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.25rem; }
+    .ins-card__tag  { font-size:0.7rem; font-weight:600; padding:0.15rem 0.55rem; border-radius:4px; background:rgba(21,58,67,0.06); color:rgba(21,58,67,0.6); }
+    .ins-card__footer { display:flex; align-items:center; gap:0.75rem; margin-top:0.5rem; }
+    .ins-card__avatar { width:1.6rem; height:1.6rem; border-radius:9999px; background:var(--dark-blue); color:#fff; font-size:0.6rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ins-card__author { font-size:0.78rem; font-weight:700; color:var(--dark-blue); }
+    .ins-card__dot   { font-size:0.6rem; color:rgba(21,58,67,0.3); }
+    .ins-card__date  { font-size:0.78rem; color:rgba(21,58,67,0.45); }
+    .ins-load-more { display:flex; justify-content:center; padding-top:1rem; }
+    .ins-load-btn { display:inline-flex; align-items:center; gap:8px; border:2px solid rgba(21,58,67,0.2); border-radius:var(--r8); padding:0.7rem 2rem; font-size:0.88rem; font-weight:700; color:var(--dark-blue); background:#fff; cursor:pointer; transition:all 0.2s; }
+    .ins-load-btn:hover { border-color:var(--dark-blue); background:var(--dark-blue); color:#fff; }
+    .ins-sidebar { display:flex; flex-direction:column; gap:1.75rem; position:sticky; top:calc(var(--nav-h) + 1.5rem); }
+    .sidebar-block { background:#fff; border-radius:var(--r16); padding:1.5rem; box-shadow:0 2px 16px rgba(21,58,67,0.07); }
+    .sidebar-block__title { font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(21,58,67,0.45); margin-bottom:1rem; }
+    .sidebar-topic { display:flex; align-items:center; justify-content:space-between; padding:0.55rem 0; border-bottom:1px solid rgba(21,58,67,0.07); text-decoration:none; cursor:pointer; }
+    .sidebar-topic:last-child { border-bottom:none; }
+    .sidebar-topic__name { font-size:0.88rem; font-weight:600; color:var(--dark-blue); }
+    .sidebar-topic__count { font-size:0.75rem; font-weight:700; background:var(--pearl); color:rgba(21,58,67,0.6); padding:0.15rem 0.55rem; border-radius:var(--r8); }
+    .sidebar-topic:hover .sidebar-topic__name { color:#c8521a; }
+    .sidebar-post { display:flex; gap:0.75rem; padding:0.6rem 0; border-bottom:1px solid rgba(21,58,67,0.07); }
+    .sidebar-post:last-child { border-bottom:none; }
+    .sidebar-post__num { font-size:1.1rem; font-weight:800; color:rgba(21,58,67,0.12); line-height:1; flex-shrink:0; width:1.4rem; }
+    .sidebar-post__title { font-size:0.85rem; font-weight:700; color:var(--dark-blue); line-height:1.4; }
+    .sidebar-post__date  { font-size:0.75rem; color:rgba(21,58,67,0.45); margin-top:0.2rem; }
+    .sidebar-newsletter { background:var(--dark-blue); border-radius:var(--r16); padding:1.5rem; }
+    .sidebar-newsletter__title { font-size:1rem; font-weight:800; color:#fff; margin-bottom:0.4rem; }
+    .sidebar-newsletter__sub   { font-size:0.82rem; color:rgba(255,255,255,0.6); line-height:1.6; margin-bottom:1rem; }
+    .sidebar-newsletter input  { width:100%; border:none; border-radius:8px; padding:0.6rem 0.9rem; font-size:0.85rem; margin-bottom:0.6rem; outline:none; font-family:inherit; }
+    .sidebar-newsletter button { width:100%; background:#c8521a; color:#fff; border:none; border-radius:8px; padding:0.65rem; font-size:0.85rem; font-weight:700; cursor:pointer; font-family:inherit; transition:opacity 0.2s; }
+    .sidebar-newsletter button:hover { opacity:0.85; }
+    .ins-cta-strip { background:var(--dark-blue); border-radius:var(--r16); padding:3rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap; margin:3rem 0 1rem; }
+    .ins-cta-strip__left h2 { color:#fff; font-size:1.4rem; font-weight:800; margin-bottom:0.4rem; }
+    .ins-cta-strip__left p  { color:rgba(255,255,255,0.65); font-size:0.9rem; max-width:440px; line-height:1.65; }
+    .ins-cta-strip__form { display:flex; gap:0.5rem; flex-shrink:0; flex-wrap:wrap; }
+    .ins-cta-strip__form input  { border:none; border-radius:var(--r8); padding:0.65rem 1.25rem; font-size:0.88rem; outline:none; min-width:220px; font-family:inherit; }
+    .ins-cta-strip__form button { background:#fff; color:var(--dark-blue); border:none; border-radius:var(--r8); padding:0.65rem 1.5rem; font-size:0.88rem; font-weight:700; cursor:pointer; font-family:inherit; transition:opacity 0.2s; white-space:nowrap; }
+    .ins-cta-strip__form button:hover { opacity:0.85; }
+
+    /* ══ KNOWLEDGE HUB ══ */
+    #page-hub .page-hero {
+      background: radial-gradient(circle at 88% 10%, rgba(30,122,95,0.18), transparent 40%),
+        radial-gradient(circle at 10% 70%, rgba(30,122,95,0.10), transparent 38%),
+        linear-gradient(180deg, #f2faf6 0%, #ebf4ef 100%);
+      padding: calc(var(--nav-h) + 5rem) 0 5rem;
+      text-align: center;
+    }
+    #page-hub .page-hero__tag  { color:#1e7a5f; margin-bottom:1rem; }
+    #page-hub .page-hero__h1   { color:var(--dark-blue); font-size:clamp(2.2rem,5vw,3.8rem); font-weight:800; line-height:1.1; letter-spacing:-0.02em; }
+    #page-hub .page-hero__sub  { color:var(--muted); font-size:1.1rem; margin-top:1.25rem; max-width:560px; margin-inline:auto; line-height:1.7; }
+    .hub-section { padding:2.5rem 0; border-bottom:1px solid var(--border); }
+    .hub-section:last-of-type { border-bottom:none; }
+    .hub-section__inner { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+    .hub-section__inner.reverse { direction:rtl; }
+    .hub-section__inner.reverse > * { direction:ltr; }
+    .hub-section__text { display:flex; flex-direction:column; gap:1.25rem; }
+    .hub-section__number { font-size:0.75rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#1e7a5f; }
+    .hub-section__title { font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; line-height:1.15; letter-spacing:-0.02em; color:var(--dark-blue); }
+    .hub-section__desc { font-size:1rem; color:var(--muted); line-height:1.75; }
+    .hub-section__list { display:flex; flex-direction:column; gap:0.6rem; padding-top:0.25rem; }
+    .hub-section__list-item { display:flex; align-items:flex-start; gap:0.6rem; font-size:0.9rem; font-weight:600; color:var(--dark-blue); }
+    .hub-section__list-item::before { content:''; flex-shrink:0; width:6px; height:6px; border-radius:50%; background:#1e7a5f; margin-top:0.45em; }
+    .hub-section__cta { display:inline-flex; align-items:center; gap:8px; padding:0.75rem 1.75rem; background:#1e7a5f; color:#fff; font-weight:700; font-size:0.9rem; border-radius:var(--r8); text-decoration:none; transition:background 0.2s; align-self:flex-start; margin-top:0.5rem; }
+    .hub-section__cta:hover { background:var(--dark-blue); }
+    .hub-section__image { border-radius:var(--r16); overflow:hidden; aspect-ratio:16/9; background:var(--border); }
+    .hub-section__image img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease; }
+    .hub-section__image:hover img { transform:scale(1.03); }
+    .hub-cta-banner { background:#1e7a5f; border-radius:var(--r16); padding:3.5rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap; margin:5rem 0; }
+    .hub-cta-banner__text { flex:1; min-width:240px; }
+    .hub-cta-banner__tag  { font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.75); margin-bottom:0.6rem; }
+    .hub-cta-banner__title { font-size:1.5rem; font-weight:800; color:#fff; line-height:1.2; }
+    .hub-cta-banner__cta { flex-shrink:0; display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--dark-blue); font-weight:700; font-size:0.9rem; padding:0.8rem 1.75rem; border-radius:var(--r8); text-decoration:none; transition:opacity 0.2s; }
+    .hub-cta-banner__cta:hover { opacity:0.85; }
+    @media(max-width:768px){.hub-section__inner,.hub-section__inner.reverse{grid-template-columns:1fr;direction:ltr;gap:2rem;}.hub-cta-banner{padding:2rem;}}
+
+    /* ══ CAREERS ══ */
+    #page-careers .page-hero {
+      background: radial-gradient(circle at 12% 14%, rgba(126,212,234,0.22), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(246,241,232,0) 64%),
+        var(--pearl);
+      padding: calc(var(--nav-h) + 5rem) 0 5rem;
+      text-align: center;
+    }
+    #page-careers .page-hero__tag  { color:var(--blue); margin-bottom:1rem; }
+    #page-careers .page-hero__h1   { color:var(--dark-blue); font-size:clamp(2.2rem,5vw,3.8rem); font-weight:800; line-height:1.1; letter-spacing:-0.02em; }
+    #page-careers .page-hero__sub  { color:var(--muted); font-size:1.1rem; margin-top:1.25rem; max-width:560px; margin-inline:auto; line-height:1.7; }
+    .careers-values { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5rem; padding:4rem 0 3rem; }
+    .cv-card { background:rgba(255,255,255,0.78); border-radius:var(--r16); border:1px solid rgba(21,58,67,0.1); padding:1.75rem; box-shadow:0 4px 20px rgba(21,58,67,0.07); }
+    .cv-card__icon  { width:2.6rem; height:2.6rem; border-radius:var(--r8); background:rgba(126,212,234,0.18); color:var(--dark-blue); display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:900; letter-spacing:0.08em; margin-bottom:0.75rem; }
+    .cv-card__title { font-size:0.95rem; font-weight:700; color:var(--dark-blue); margin-bottom:0.4rem; }
+    .cv-card__desc  { font-size:0.85rem; color:rgba(21,58,67,0.6); line-height:1.65; }
+    .jobs-section { padding-bottom:5rem; }
+    .jobs-header { display:flex; align-items:baseline; justify-content:space-between; border-bottom:2px solid rgba(21,58,67,0.1); padding-bottom:1rem; margin-bottom:2rem; }
+    .jobs-header h2 { font-size:1.5rem; font-weight:800; color:var(--dark-blue); }
+    .jobs-count     { font-size:0.85rem; color:rgba(21,58,67,0.5); font-weight:600; }
+    .job-card { background:rgba(255,255,255,0.78); border-radius:var(--r16); border:1px solid rgba(21,58,67,0.1); padding:1.75rem 2rem; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; box-shadow:0 2px 16px rgba(21,58,67,0.06); transition:transform 0.2s ease,box-shadow 0.2s ease; }
+    .job-card:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(21,58,67,0.12); }
+    .job-card__info { flex:1; }
+    .job-card__dept { font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue); margin-bottom:0.4rem; }
+    .job-card__title { font-size:1.05rem; font-weight:700; color:var(--dark-blue); margin-bottom:0.5rem; }
+    .job-card__meta  { display:flex; gap:1rem; flex-wrap:wrap; }
+    .job-card__tag   { font-size:0.78rem; font-weight:600; color:rgba(21,58,67,0.55); }
+    .job-card__apply { display:inline-flex; align-items:center; gap:6px; background:var(--dark-blue); color:#fff; font-size:0.85rem; font-weight:700; padding:0.6rem 1.4rem; border-radius:var(--r8); text-decoration:none; white-space:nowrap; transition:background 0.2s; }
+    .job-card__apply:hover { background:var(--blue); }
+    .careers-cta { background:var(--dark-blue); border-radius:var(--r16); padding:3.5rem; text-align:center; margin:3rem 0 5rem; }
+    .careers-cta h2 { color:#fff; font-size:1.8rem; font-weight:800; margin-bottom:0.75rem; }
+    .careers-cta p  { color:rgba(255,255,255,0.65); font-size:0.95rem; max-width:480px; margin-inline:auto; margin-bottom:1.75rem; line-height:1.7; }
+    .careers-cta a  { display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--dark-blue); font-weight:700; font-size:0.9rem; padding:0.75rem 1.75rem; border-radius:var(--r8); text-decoration:none; transition:opacity 0.2s; }
+    .careers-cta a:hover { opacity:0.85; }
+    @media(max-width:600px){.job-card{flex-direction:column;align-items:flex-start;}}
+
+    /* ══ CONTACT ══ */
+    .ct-page { background:var(--pearl); padding-top:var(--nav-h); }
+    .ct-main { display:grid; grid-template-columns:1fr 1.35fr; gap:6rem; padding:6rem 0 7rem; align-items:start; }
+    @media(max-width:860px){.ct-main{grid-template-columns:1fr;gap:4rem;padding:4rem 0 5rem;}}
+    .ct-left__eyebrow { font-size:0.72rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--blue); margin-bottom:1.25rem; }
+    .ct-left__heading { font-size:clamp(2rem,4vw,3rem); font-weight:800; line-height:1.1; letter-spacing:-0.025em; color:var(--dark-blue); margin-bottom:1.5rem; }
+    .ct-left__body { font-size:1rem; color:var(--muted); line-height:1.8; max-width:380px; margin-bottom:3rem; }
+    .ct-details { display:flex; flex-direction:column; gap:1.5rem; margin-bottom:3rem; }
+    .ct-detail__label { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(21,58,67,0.4); margin-bottom:0.25rem; }
+    .ct-detail__value { font-size:1rem; font-weight:600; color:var(--dark-blue); }
+    .ct-detail__value a { color:var(--dark-blue); text-decoration:none; border-bottom:1px solid rgba(21,58,67,0.2); transition:border-color 0.2s,color 0.2s; }
+    .ct-detail__value a:hover { color:var(--blue); border-color:var(--blue); }
+    .ct-social { display:flex; gap:0.75rem; }
+    .ct-social-link { width:2.25rem; height:2.25rem; border-radius:50%; border:1.5px solid rgba(21,58,67,0.18); display:flex; align-items:center; justify-content:center; color:var(--dark-blue); transition:background 0.2s,border-color 0.2s,color 0.2s; }
+    .ct-social-link:hover { background:var(--dark-blue); border-color:var(--dark-blue); color:#fff; }
+    .ct-form-wrap { background:#fff; border-radius:var(--r16); padding:2.5rem; border:1px solid rgba(21,58,67,0.09); }
+    .ct-form-wrap h2 { font-size:1.2rem; font-weight:800; color:var(--dark-blue); margin-bottom:0.3rem; }
+    .ct-form-wrap > p { font-size:0.88rem; color:var(--muted); margin-bottom:2rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+    .form-group { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1rem; }
+    .form-group label { font-size:0.78rem; font-weight:700; color:var(--dark-blue); }
+    .form-group input,.form-group select,.form-group textarea { width:100%; border:1.5px solid rgba(21,58,67,0.13); border-radius:var(--r8); padding:0.72rem 0.95rem; font-size:0.9rem; color:var(--dark-blue); font-family:inherit; background:#fafaf8; outline:none; transition:border-color 0.2s,background 0.2s; }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color:var(--dark-blue); background:#fff; }
+    .form-group textarea { resize:vertical; min-height:110px; }
+    .ct-btn-submit { width:100%; padding:0.9rem; background:var(--dark-blue); color:#fff; border:none; border-radius:var(--r8); font-size:0.92rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background 0.2s; margin-top:0.25rem; }
+    .ct-btn-submit:hover { background:var(--blue); }
+    .ct-success { display:none; text-align:center; padding:3.5rem 1rem; }
+    .ct-success__line { display:inline-block; width:2.5rem; height:2px; background:var(--blue); margin-bottom:1.5rem; }
+    .ct-success h3 { font-size:1.1rem; font-weight:800; color:var(--dark-blue); margin-bottom:0.5rem; }
+    .ct-success p  { font-size:0.88rem; color:var(--muted); line-height:1.7; }
+    .ct-rule { border:none; border-top:1px solid var(--border); margin:0; }
+    .ct-bottom { padding:5rem 0 7rem; }
+    .ct-bottom__heading { font-size:1.1rem; font-weight:700; color:rgba(21,58,67,0.45); letter-spacing:0.04em; margin-bottom:3rem; }
+    .ct-ways { display:grid; grid-template-columns:repeat(4,1fr); gap:3rem; }
+    @media(max-width:860px){.ct-ways{grid-template-columns:repeat(2,1fr);gap:2rem;}}
+    @media(max-width:500px){.ct-ways{grid-template-columns:1fr;}}
+    .ct-way__label { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue); margin-bottom:0.6rem; }
+    .ct-way__title { font-size:1.05rem; font-weight:800; color:var(--dark-blue); margin-bottom:0.6rem; line-height:1.3; }
+    .ct-way__desc  { font-size:0.85rem; color:var(--muted); line-height:1.7; margin-bottom:1rem; }
+    .ct-way__link  { font-size:0.85rem; font-weight:700; color:var(--dark-blue); text-decoration:none; border-bottom:1px solid rgba(21,58,67,0.25); transition:color 0.2s,border-color 0.2s; }
+    .ct-way__link:hover { color:var(--blue); border-color:var(--blue); }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar_component" id="navbar">
+  <div class="navbar_container">
+    <a href="#" onclick="navigate('home',null,true);return false;" class="navbar_logo-link">
+      <img src="assets/logos/horizontal/Faro Foundation new logo_horizontal_primary-01 (1).png" alt="FARO Foundation" class="navbar_logo-img"/>
+    </a>
+    <button class="menu-icon1" id="hamburger" aria-label="Toggle menu">
+      <div class="menu-icon1_line-top"></div>
+      <div class="menu-icon1_line-middle"></div>
+      <div class="menu-icon1_line-bottom"></div>
+    </button>
+    <nav class="navbar_menu" id="nav-menu">
+      <div class="navbar_menu-links">
+        <a href="#" data-page="home"     data-anchor="mission"  class="navbar_link">About</a>
+        <a href="#" data-page="home"     data-anchor="projects" class="navbar_link">Projects</a>
+        <a href="#" data-page="insights"                        class="navbar_link">Insights</a>
+        <a href="#" data-page="hub"                             class="navbar_link">Knowledge Hub</a>
+        <a href="#" data-page="careers"                         class="navbar_link">Careers</a>
+        <a href="#" data-page="home"     data-anchor="team"     class="navbar_link">Our Team</a>
+        <a href="#" data-page="contact"                         class="navbar_link">Contact</a>
+      </div>
+      <div class="navbar_menu-buttons">
+        <button class="navbar_search" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════
+     PAGE: HOME
+════════════════════════════════════════ -->
+<div id="page-home" class="spa-page active">
+
+<header class="gf-hero">
+  <div class="gf-hero__bg"></div>
+  <div class="gf-hero__content padding-global container-large">
+    <h1 class="gf-hero__headline">FARO Foundation<br>Mongolia</h1>
+    <div class="gf-hero__actions">
+      <a href="#" onclick="scrollToAnchor('mission');return false;" class="btn-impact-hero">Learn More About Us</a>
+      <a href="#" onclick="scrollToAnchor('projects');return false;" class="btn-donate-hero">View Our Projects</a>
+    </div>
+  </div>
+</header>
+
+<section id="mission" class="section_mission">
+  <div class="padding-global">
+    <div class="container-small">
+      <div class="padding-section-large text-align-center">
+        <div class="margin-bottom-medium"><div class="text-style-tagline">Our Mission</div></div>
+        <div class="margin-bottom-small">
+          <h2 class="heading-style-h2">Our core mission is to equip individuals and organizations with the skills to navigate complex modern environments.</h2>
+        </div>
+        <p class="text-size-medium">We focus on curriculum development, training sessions, policy advocacy, impactful campaigns, and engaging events — ensuring our interventions produce measurable and lasting results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="empower" class="section_empower">
+  <div class="padding-global">
+    <div class="container-large">
+      <div class="empower_component">
+        <div class="padding-section-large">
+          <div class="grain"></div>
+          <div class="noise"></div>
+          <div class="margin-bottom-medium"><div class="text-style-tagline">About Us</div></div>
+          <div class="empower_tab-component" id="empower-tabs">
+            <div class="empower_tab-menu" role="tablist">
+              <button class="empower_link-block w--current" role="tab" data-tab="0" aria-selected="true">
+                <div class="empower_link-text-small">01</div>
+                <h3 class="empower_tab-title">Our Core Pillars</h3>
+                <div class="empower_tab_timer"></div>
+                <div class="empower_tab_timer red" id="timer-0"></div>
+              </button>
+              <button class="empower_link-block" role="tab" data-tab="1" aria-selected="false">
+                <div class="empower_link-text-small">02</div>
+                <h3 class="empower_tab-title">Our Partners &amp; Global Network</h3>
+                <div class="empower_tab_timer"></div>
+                <div class="empower_tab_timer red" id="timer-1"></div>
+              </button>
+              <button class="empower_link-block" role="tab" data-tab="2" aria-selected="false">
+                <div class="empower_link-text-small">03</div>
+                <h3 class="empower_tab-title">Our Mission &amp; Approach</h3>
+                <div class="empower_tab_timer"></div>
+                <div class="empower_tab_timer red" id="timer-2"></div>
+              </button>
+              <button class="empower_link-block" role="tab" data-tab="3" aria-selected="false">
+                <div class="empower_link-text-small">04</div>
+                <h3 class="empower_tab-title">Our Expertise</h3>
+                <div class="empower_tab_timer"></div>
+                <div class="empower_tab_timer red" id="timer-3"></div>
+              </button>
+              <button class="empower_link-block" role="tab" data-tab="4" aria-selected="false">
+                <div class="empower_link-text-small">05</div>
+                <h3 class="empower_tab-title">Our Core Values</h3>
+                <div class="empower_tab_timer"></div>
+                <div class="empower_tab_timer red" id="timer-4"></div>
+              </button>
+            </div>
+            <div class="empower_tab-content">
+              <div class="empower_tab-panel" id="panel-0" role="tabpanel">
+                <div class="empower_tab-container"><div class="empower_card">
+                  <div class="empower_card-content">
+                    <svg class="empower_card-img" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="36" width="12" height="20" rx="2" stroke="currentColor" stroke-width="2.5"/><rect x="26" y="24" width="12" height="32" rx="2" stroke="currentColor" stroke-width="2.5"/><rect x="44" y="12" width="12" height="44" rx="2" stroke="currentColor" stroke-width="2.5"/></svg>
+                    <div class="empower_card-text-wrap">
+                      <div class="margin-bottom-small"><div class="heading-style-h5">Our Core Pillars</div></div>
+                      <p class="text-size-regular">Founded in 2018, FARO Foundation is a non-governmental organization dedicated to driving sustainable, sector-wide development. We deliver comprehensive solutions across digital transformation, public health, and ESG (Environmental, Social, and Governance).</p>
+                      <p class="text-size-regular" style="margin-top:0.75rem;">Our primary focus is bridging the gap between human capacity and the complex demands of an evolving world. Through strategic curriculum development, targeted training, and evidence-based policy advocacy, we equip communities, corporations, and government institutions with the practical tools they need to operate securely, ethically and effectively.</p>
+                    </div>
+                  </div>
+                  <div class="empower_card-background"><div class="empower_card-texture _1 texture-placeholder tp-1"></div></div>
+                </div></div>
+              </div>
+              <div class="empower_tab-panel hidden" id="panel-1" role="tabpanel">
+                <div class="empower_tab-container"><div class="empower_card">
+                  <div class="empower_card-content">
+                    <svg class="empower_card-img" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="22" stroke="currentColor" stroke-width="2.5"/><ellipse cx="32" cy="32" rx="10" ry="22" stroke="currentColor" stroke-width="2.5"/><path d="M10 32h44M32 10a35 22 0 0 1 0 44M32 10a35 22 0 0 0 0 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                    <div class="empower_card-text-wrap">
+                      <div class="margin-bottom-small"><div class="heading-style-h5">Our Partners &amp; Global Network</div></div>
+                      <p class="text-size-regular">At FARO Foundation, we recognize that architecting sustainable, systemic change requires collective intelligence and cross-sector collaboration. We strategically align ourselves with world-class institutions — international development agencies, government bodies, leading technology corporations, and grassroots civil society organizations.</p>
+                      <p class="text-size-regular" style="margin-top:0.75rem;">By co-creating programs with our partners, we ensure that our interventions are scalable, culturally relevant, and aligned with the highest global standards. Our network includes the United Nations, UNICEF, the European Union, USAID, Meta, OpenAI, and many more.</p>
+                    </div>
+                  </div>
+                  <div class="empower_card-background is-pearl"><div class="empower_card-texture _2 texture-placeholder tp-2"></div></div>
+                </div></div>
+              </div>
+              <div class="empower_tab-panel hidden" id="panel-2" role="tabpanel">
+                <div class="empower_tab-container"><div class="empower_card">
+                  <div class="empower_card-content">
+                    <svg class="empower_card-img" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="20" r="10" stroke="currentColor" stroke-width="2.5"/><path d="M14 56c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M44 28l6 6-6 6M20 28l-6 6 6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <div class="empower_card-text-wrap">
+                      <div class="margin-bottom-small"><div class="heading-style-h5">Our Mission &amp; Approach</div></div>
+                      <p class="text-size-regular">Our core mission is to equip individuals and organizations with the necessary skills and knowledge to navigate complex modern environments effectively and safely. To achieve this, we employ a holistic approach.</p>
+                      <p class="text-size-regular" style="margin-top:0.75rem;">We focus our operations on key strategic areas: curriculum development, training sessions, policy advocacy, impactful campaigns, and engaging events. By integrating these methods, we ensure that our interventions produce measurable and lasting results.</p>
+                    </div>
+                  </div>
+                  <div class="empower_card-background is-pearl"><div class="empower_card-texture _3 texture-placeholder tp-3"></div></div>
+                </div></div>
+              </div>
+              <div class="empower_tab-panel hidden" id="panel-3" role="tabpanel">
+                <div class="empower_tab-container"><div class="empower_card">
+                  <div class="empower_card-content">
+                    <svg class="empower_card-img" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 48l10-14 8 8 10-16 12 22H12z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="48" cy="16" r="8" stroke="currentColor" stroke-width="2.5"/><path d="M48 12v4l3 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <div class="empower_card-text-wrap">
+                      <div class="margin-bottom-small"><div class="heading-style-h5">Our Expertise</div></div>
+                      <p class="text-size-regular">We are committed to inclusive digitalization and societal resilience. We actively operate at the forefront of pivotal domains, including cyber security, online safety, child protection, combating misinformation, and addressing cyberbullying.</p>
+                      <p class="text-size-regular" style="margin-top:0.75rem;">Through our diverse cross-sectoral initiatives, we endeavor to equip the public with the tools to engage with digital technologies and emerging societal challenges responsibly and securely.</p>
+                    </div>
+                  </div>
+                  <div class="empower_card-background is-purple"><div class="empower_card-texture _4 texture-placeholder tp-4"></div></div>
+                </div></div>
+              </div>
+              <div class="empower_tab-panel hidden" id="panel-4" role="tabpanel">
+                <div class="empower_tab-container"><div class="empower_card">
+                  <div class="empower_card-content">
+                    <svg class="empower_card-img" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32 10l4 12h13l-10 8 4 12-11-8-11 8 4-12-10-8h13z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 44v10M22 54h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                    <div class="empower_card-text-wrap">
+                      <div class="margin-bottom-small"><div class="heading-style-h5">Our Core Values</div></div>
+                      <p class="text-size-regular">Every project, training, and policy initiative we undertake is strictly guided by our institutional values:</p>
+                      <ul class="empower_values-list">
+                        <li>Collaboration</li><li>Life-long learning</li><li>Inclusivity</li><li>Empowerment</li><li>Ethical use of technology</li><li>Critical thinking</li><li>Community engagement</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="empower_card-background"><div class="empower_card-texture _1 texture-placeholder tp-1"></div></div>
+                </div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="projects" class="vision_component">
+  <div class="padding-global">
+    <div class="container-small">
+      <div class="padding-section-large text-align-center">
+        <div class="margin-bottom-medium"><div class="text-style-tagline">Our Projects</div></div>
+        <div class="margin-bottom-small">
+          <h2 class="heading-style-h2">Driving impact across digital transformation, public health, and ESG.</h2>
+        </div>
+        <p class="text-size-medium">From policy advocacy to hands-on training, our projects equip communities and institutions with the tools they need to navigate a rapidly evolving world.</p>
+      </div>
+    </div>
+  </div>
+  <div class="vision_content-bottom">
+    <div class="vision_image-list">
+      <div class="vision_side vision_side--left">
+        <div class="vision_image-wrapper vision_tall-img"><div class="vision_placeholder vp-1"></div><div class="vision_side-overlay"><div class="vision_side-gradient"></div></div></div>
+        <div class="vision_inner-group">
+          <div class="vision_image-wrapper vision_side-img"><div class="vision_placeholder vp-2"></div><div class="vision_side-overlay"><div class="vision_side-gradient"></div></div></div>
+          <div class="vision_image-wrapper vision_side-img"><div class="vision_placeholder vp-3"></div><div class="vision_side-overlay"><div class="vision_side-gradient"></div></div></div>
+        </div>
+      </div>
+      <div class="vision_image-wrapper is-image-large">
+        <div class="vision_placeholder vp-main"></div>
+        <div class="text-overlay-wrap">
+          <div class="padding-global"><div class="container-large"><h2 class="vision_overlay-text">— where capacity drives change.</h2></div></div>
+          <div class="dark_gradient"></div>
+        </div>
+      </div>
+      <div class="vision_side vision_side--right">
+        <div class="vision_inner-group">
+          <div class="vision_image-wrapper vision_side-img"><div class="vision_placeholder vp-5"></div><div class="vision_side-overlay"><div class="vision_side-gradient"></div></div></div>
+          <div class="vision_image-wrapper vision_side-img"><div class="vision_placeholder vp-6"></div><div class="vision_side-overlay"><div class="vision_side-gradient"></div></div></div>
+        </div>
+        <div class="vision_image-wrapper vision_tall-img"><div class="vision_placeholder vp-7"></div><div class="vision_side-overlay"><div class="vision_side-gradient"></div></div></div>
+      </div>
+    </div>
+    <div class="vision_ix-trigger"></div>
+  </div>
+</div>
+
+<section id="stats" class="section_stats">
+  <div class="padding-global"><div class="container-large"><div class="padding-section-large">
+    <div class="stats_heading-row">
+      <div>
+        <div class="margin-bottom-medium"><div class="text-style-tagline">Our Impact</div></div>
+        <h2 class="heading-style-h2">By the numbers: the reach of our work</h2>
+      </div>
+      <div class="stats_description-col">
+        <p class="stats_description">A look at what FARO Foundation has achieved over seven years — and what we continue to grow together with communities and partners across Central Asia and beyond.</p>
+      </div>
+    </div>
+    <div class="stats_list">
+      <div class="stats_image-wrapper stats_image-wrapper--tall"><div class="stats_image-placeholder sip-1"></div></div>
+      <div class="stats_item stats_item--purple"><div class="stats_item-content"><div class="stats_number"><span class="counter" data-target="44000" data-suffix="+">44000+</span></div><div class="stats_label">Citizens we have empowered</div></div><p class="stats_desc">People reached through digital literacy, public awareness, and community-focused programs.</p><div class="stats_texture tp-stat-purple"></div></div>
+      <div class="stats_item stats_item--lightblue"><div class="stats_item-content"><div class="stats_number"><span class="counter" data-target="710" data-suffix="+">710+</span></div><div class="stats_label">Training we have conducted</div></div><p class="stats_desc">Hands-on sessions delivered for educators, communities, institutions, and cross-sector partners.</p><div class="stats_texture tp-stat-lightblue"></div></div>
+      <div class="stats_item stats_item--vermillion"><div class="stats_item-content"><div class="stats_number"><span class="counter" data-target="40" data-suffix="+">40+</span></div><div class="stats_label">Seed trainers we have developed</div></div><p class="stats_desc">Trainers prepared to scale knowledge and strengthen local capacity across communities.</p><div class="stats_texture tp-stat-vermillion"></div></div>
+      <div class="stats_item stats_item--mint"><div class="stats_item-content"><div class="stats_number"><span class="counter" data-target="10" data-suffix="+">10+</span></div><div class="stats_label">Strategic campaigns launched</div></div><p class="stats_desc">Public-facing campaigns designed to raise awareness and drive measurable action.</p><div class="stats_texture tp-stat-lightblue"></div></div>
+      <div class="stats_item stats_item--pearl"><div class="stats_item-content"><div class="stats_number"><span class="counter" data-target="3" data-suffix="">3</span></div><div class="stats_label">Policy advocacy initiatives</div></div><p class="stats_desc">Targeted advocacy work supporting safer, more inclusive, and more resilient systems.</p><div class="stats_texture tp-stat-purple"></div></div>
+      <div class="stats_item stats_item--blue"><div class="stats_item-content"><div class="stats_number"><span class="counter" data-target="20" data-suffix="+">20+</span></div><div class="stats_label">Global institutional partners</div></div><p class="stats_desc">Partners across development, technology, public policy, and civil society.</p><div class="stats_texture tp-stat-vermillion"></div></div>
+      <div class="stats_image-wrapper"><div class="stats_image-placeholder sip-2"></div></div>
+    </div>
+  </div></div></div>
+</section>
+
+<section id="partners" class="section_partners">
+  <div class="padding-global"><div class="container-large"><div class="padding-section-large">
+    <div class="partners_intro">
+      <div class="margin-bottom-medium"><div class="text-style-tagline">Our Partners</div></div>
+      <h2 class="heading-style-h2 partners_heading">Trusted by world-class institutions</h2>
+      <p class="partners_sub">We collaborate with leading global organizations across government, technology, and civil society.</p>
+    </div>
+    <div class="partners_categories">
+      <div class="partners_cat-block">
+        <div class="partners_cat-info"><div class="text-style-tagline">Government &amp; Regulatory Bodies</div><p class="partners_cat-desc">To effect lasting policy change and modernize national frameworks, we work directly with public sector leaders.</p></div>
+        <div class="partners_logos-row">
+          <div class="partners_logo-pill"><img src="assets/partners/mddic.png" alt="Ministry of Digital Development" class="partners_logo-img partners_logo-img--wide"></div>
+          <div class="partners_logo-pill"><img src="assets/partners/moe.png" alt="Ministry of Education" class="partners_logo-img partners_logo-img--wide"></div>
+          <div class="partners_logo-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg> Communications Regulatory Commission</div>
+          <div class="partners_logo-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> U.S. Embassy Ulaanbaatar</div>
+        </div>
+      </div>
+      <div class="partners_cat-block">
+        <div class="partners_cat-info"><div class="text-style-tagline">Corporate &amp; Technology Partners</div><p class="partners_cat-desc">Innovation is central to our methodology. We partner with global technology leaders to scale digital literacy, promote AI ethics, and enhance online safety.</p></div>
+        <div class="partners_logos-row">
+          <div class="partners_logo-pill"><img src="assets/partners/meta.svg" alt="Meta" class="partners_logo-img partners_logo-img--mark partners_logo-img--plain"></div>
+          <div class="partners_logo-pill"><img src="assets/partners/tiktok.svg" alt="TikTok" class="partners_logo-img partners_logo-img--mark partners_logo-img--plain"></div>
+          <div class="partners_logo-pill"><img src="assets/partners/openai.svg" alt="OpenAI" class="partners_logo-img partners_logo-img--mark"></div>
+          <div class="partners_logo-pill"><img src="assets/partners/dw-akademie.svg" alt="DW Akademie" class="partners_logo-img partners_logo-img--wide"></div>
+          <div class="partners_logo-pill">The Asia Group</div>
+        </div>
+      </div>
+      <div class="partners_cat-block">
+        <div class="partners_cat-info"><div class="text-style-tagline">NGOs &amp; Civil Society Organizations</div><p class="partners_cat-desc">We believe that systemic change must take root at the community level. To ensure grassroots impact, we empower and partner with civil society entities.</p></div>
+        <div class="partners_logos-row">
+          <div class="partners_logo-pill"><img src="assets/partners/mfcc.png" alt="Mongolian Fact Checking Center" class="partners_logo-img partners_logo-img--wide"></div>
+          <div class="partners_logo-pill"><img src="assets/partners/techforgood.svg" alt="Tech for Good Asia" class="partners_logo-img partners_logo-img--wide"></div>
+          <div class="partners_logo-pill"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Local Communities</div>
+        </div>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<section id="team" class="section_team">
+  <div class="padding-global"><div class="container-large"><div class="padding-section-large">
+    <div class="text-align-center margin-bottom-medium"><div class="text-style-tagline">Our Team</div></div>
+    <h2 class="heading-style-h2 text-align-center team_heading-main">The people behind our mission</h2>
+    <div class="team_cards">
+      <div class="team_card"><div class="team_card-bg tc-bg1"></div><div class="team_card-overlay"><div class="team_card-brief"><p class="team_card-role">Executive Director &amp; Co-Founder</p><h3 class="team_card-name">Alexandra Chen</h3></div><div class="team_card-detail"><p class="team_card-bio">Co-founded FARO Foundation in 2018. Former UN advisor with 15+ years in international development and institutional reform.</p><a href="#" onclick="navigate('contact');return false;" class="team_card-link">Get in touch ↗</a></div></div></div>
+      <div class="team_card"><div class="team_card-bg tc-bg2"></div><div class="team_card-overlay"><div class="team_card-brief"><p class="team_card-role">Director of Programs</p><h3 class="team_card-name">David Munkh</h3></div><div class="team_card-detail"><p class="team_card-bio">Leads all ground-level programs across Mongolia, Kazakhstan, and Uzbekistan. Former UNICEF manager with 12 years in capacity-building.</p><a href="#" onclick="navigate('contact');return false;" class="team_card-link">Get in touch ↗</a></div></div></div>
+      <div class="team_card"><div class="team_card-bg tc-bg3"></div><div class="team_card-overlay"><div class="team_card-brief"><p class="team_card-role">Head of Digital Transformation</p><h3 class="team_card-name">Sophia Erdene</h3></div><div class="team_card-detail"><p class="team_card-bio">Architects FARO's cybersecurity and digital literacy curricula. Previously led tech education programs with Meta and Google.</p><a href="#" onclick="navigate('contact');return false;" class="team_card-link">Get in touch ↗</a></div></div></div>
+      <div class="team_card"><div class="team_card-bg tc-bg4"></div><div class="team_card-overlay"><div class="team_card-brief"><p class="team_card-role">Head of Public Health</p><h3 class="team_card-name">James Bataar</h3></div><div class="team_card-detail"><p class="team_card-bio">Drives health policy advocacy across the region. Former WHO consultant specializing in Central Asian public health infrastructure.</p><a href="#" onclick="navigate('contact');return false;" class="team_card-link">Get in touch ↗</a></div></div></div>
+      <div class="team_card"><div class="team_card-bg tc-bg5"></div><div class="team_card-overlay"><div class="team_card-brief"><p class="team_card-role">Communications &amp; Partnerships</p><h3 class="team_card-name">Nomin Gal</h3></div><div class="team_card-detail"><p class="team_card-bio">Manages FARO's 20+ global partners. Background at the EU delegation in Ulaanbaatar and USAID regional programs.</p><a href="#" onclick="navigate('contact');return false;" class="team_card-link">Get in touch ↗</a></div></div></div>
+    </div>
+  </div></div></div>
+</section>
+
+<section class="section_cta">
+  <div class="padding-global"><div class="container-small"><div class="padding-section-large text-align-center">
+    <div class="text-style-tagline margin-bottom-medium">Make a Difference</div>
+    <h2 class="heading-style-h2 cta_heading">Help us turn small actions into lasting change. Your support empowers the communities and programs building a better, more connected future — one step at a time.</h2>
+  </div></div></div>
+</section>
+
+<div id="vision-expand" class="vision-expand"></div>
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: INSIGHTS
+════════════════════════════════════════ -->
+<div id="page-insights" class="spa-page">
+
+<section class="ins-hero">
+  <div class="padding-global"><div class="container-large">
+    <div class="ins-hero__inner">
+      <div class="ins-hero__left">
+        <div class="text-style-tagline ins-hero__tag">Insights</div>
+        <h1 class="ins-hero__h1">Ideas, research &amp; perspectives from FARO</h1>
+        <p class="ins-hero__sub">Explore our latest thinking on digital transformation, cybersecurity, public health, ESG, and sustainable development across Central Asia.</p>
+        <div class="ins-hero__stats">
+          <div><div class="ins-hero__stat-num">24+</div><div class="ins-hero__stat-lbl">Articles</div></div>
+          <div><div class="ins-hero__stat-num">7</div><div class="ins-hero__stat-lbl">Topics</div></div>
+          <div><div class="ins-hero__stat-num">6</div><div class="ins-hero__stat-lbl">Authors</div></div>
+        </div>
+      </div>
+      <div class="ins-hero__search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="ins-search" placeholder="Search articles…" autocomplete="off"/>
+      </div>
+    </div>
+    <div class="ins-featured fade-up">
+      <div class="ins-featured__img"><span class="ins-featured__badge">Featured</span></div>
+      <div class="ins-featured__body">
+        <div class="ins-featured__cat">Digital Transformation</div>
+        <h2 class="ins-featured__title">Bridging the Digital Divide in Rural Mongolia: A Five-Year Retrospective</h2>
+        <p class="ins-featured__excerpt">Five years after launching our first digital literacy program in rural aimags, we revisit the communities we worked with. The data is clear: targeted training shifts more than skills — it shifts economic trajectories.</p>
+        <div class="ins-featured__meta">
+          <div class="ins-featured__author"><div class="ins-featured__avatar">DT</div><span class="ins-featured__author-name">Dolgion Tserenpuntsag</span></div>
+          <div class="ins-featured__sep"></div>
+          <span class="ins-featured__date">May 14, 2025</span>
+          <div class="ins-featured__sep"></div>
+          <span class="ins-featured__time">8 min read</span>
+        </div>
+        <a href="insight.html#digital-divide" class="ins-featured__cta">Read full article →</a>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section style="background:#fdf5e8;">
+  <div class="padding-global"><div class="container-large">
+    <div class="ins-filters">
+      <button class="ins-filter-btn active" data-filter="all">All</button>
+      <button class="ins-filter-btn" data-filter="Digital Transformation">Digital Transformation</button>
+      <button class="ins-filter-btn" data-filter="Cyber Safety">Cyber Safety</button>
+      <button class="ins-filter-btn" data-filter="ESG">ESG</button>
+      <button class="ins-filter-btn" data-filter="Public Health">Public Health</button>
+      <button class="ins-filter-btn" data-filter="Policy">Policy</button>
+      <button class="ins-filter-btn" data-filter="Impact Report">Impact Reports</button>
+    </div>
+    <div class="ins-layout">
+      <div>
+        <div class="ins-grid" id="articles-grid">
+          <article class="ins-card fade-up" data-cat="Cyber Safety"><div class="ins-card__thumb">CS</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">Cyber Safety</span><span class="ins-card__read-time">6 min read</span></div><div class="ins-card__title">Online Safety for Youth: Lessons from Our 2024 National Campaign</div><p class="ins-card__excerpt">After reaching 12,000+ students across 47 schools, we share the pedagogical frameworks, surprising challenges, and measurable behaviour changes our youth cyber-safety initiative produced.</p><div class="ins-card__tags"><span class="ins-card__tag">Youth</span><span class="ins-card__tag">Schools</span><span class="ins-card__tag">Misinformation</span></div><div class="ins-card__footer"><div class="ins-card__avatar">BM</div><span class="ins-card__author">Bayarmaa Munkhbat</span><span class="ins-card__dot">•</span><span class="ins-card__date">March 3, 2025</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="ESG"><div class="ins-card__thumb">ESG</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">ESG</span><span class="ins-card__read-time">5 min read</span></div><div class="ins-card__title">ESG Frameworks for Mongolian SMEs: A Practical Step-by-Step Guide</div><p class="ins-card__excerpt">Environmental, Social, and Governance reporting is no longer optional for businesses seeking international partnerships. We break down the essentials into clear, actionable steps.</p><div class="ins-card__tags"><span class="ins-card__tag">SMEs</span><span class="ins-card__tag">Reporting</span><span class="ins-card__tag">Governance</span></div><div class="ins-card__footer"><div class="ins-card__avatar">SB</div><span class="ins-card__author">Saruul Batbold</span><span class="ins-card__dot">•</span><span class="ins-card__date">January 20, 2025</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="Public Health"><div class="ins-card__thumb">PH</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">Public Health</span><span class="ins-card__read-time">7 min read</span></div><div class="ins-card__title">Digital Tools in Public Health: Five Case Studies from Mongolia's Remote Aimags</div><p class="ins-card__excerpt">Mobile health clinics equipped with telemedicine capabilities are reaching patients who previously travelled six hours for a consultation.</p><div class="ins-card__tags"><span class="ins-card__tag">Telemedicine</span><span class="ins-card__tag">Rural Health</span><span class="ins-card__tag">Data</span></div><div class="ins-card__footer"><div class="ins-card__avatar">OG</div><span class="ins-card__author">Oyungerel Gantulga</span><span class="ins-card__dot">•</span><span class="ins-card__date">November 11, 2024</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="Policy"><div class="ins-card__thumb">PO</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">Policy</span><span class="ins-card__read-time">9 min read</span></div><div class="ins-card__title">Advocating for Inclusive Tech Policy in Central Asia: Our 2024 Legislative Milestones</div><p class="ins-card__excerpt">From drafting input to Mongolia's first comprehensive digital safety bill to advising UNICEF's Central Asia office on child online protection standards, 2024 was our most active policy year yet.</p><div class="ins-card__tags"><span class="ins-card__tag">Legislation</span><span class="ins-card__tag">UNICEF</span><span class="ins-card__tag">Child Safety</span></div><div class="ins-card__footer"><div class="ins-card__avatar">TN</div><span class="ins-card__author">Tserenpuntsag Norov</span><span class="ins-card__dot">•</span><span class="ins-card__date">September 5, 2024</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="Impact Report"><div class="ins-card__thumb">IR</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">Impact Report</span><span class="ins-card__read-time">12 min read</span></div><div class="ins-card__title">FARO Foundation Annual Impact Report 2024: Metrics, Milestones &amp; What Comes Next</div><p class="ins-card__excerpt">Our annual report covers 38 active programs, 65,000+ direct beneficiaries, 14 new institutional partnerships, and MNT 2.3 billion in programme expenditure.</p><div class="ins-card__tags"><span class="ins-card__tag">Annual Report</span><span class="ins-card__tag">Metrics</span><span class="ins-card__tag">2024</span></div><div class="ins-card__footer"><div class="ins-card__avatar">FF</div><span class="ins-card__author">FARO Editorial Team</span><span class="ins-card__dot">•</span><span class="ins-card__date">August 28, 2024</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="Digital Transformation"><div class="ins-card__thumb">DT</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">Digital Transformation</span><span class="ins-card__read-time">6 min read</span></div><div class="ins-card__title">e-Government in Mongolia: Progress, Gaps, and the Road to Inclusive Digital Services</div><p class="ins-card__excerpt">Mongolia's e-government portal now handles 210 public services — up from 34 in 2019. But adoption rates in aimags outside Ulaanbaatar remain stubbornly low.</p><div class="ins-card__tags"><span class="ins-card__tag">e-Government</span><span class="ins-card__tag">Inclusion</span><span class="ins-card__tag">Infrastructure</span></div><div class="ins-card__footer"><div class="ins-card__avatar">DT</div><span class="ins-card__author">Dolgion Tserenpuntsag</span><span class="ins-card__dot">•</span><span class="ins-card__date">July 14, 2024</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="Cyber Safety"><div class="ins-card__thumb">CS</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">Cyber Safety</span><span class="ins-card__read-time">5 min read</span></div><div class="ins-card__title">Cyberbullying in Mongolia: Prevalence, Impact, and What Schools Can Do Today</div><p class="ins-card__excerpt">A survey of 3,200 secondary school students found that 41% had experienced some form of online harassment in the past year — yet fewer than 12% reported it.</p><div class="ins-card__tags"><span class="ins-card__tag">Cyberbullying</span><span class="ins-card__tag">Survey</span><span class="ins-card__tag">Intervention</span></div><div class="ins-card__footer"><div class="ins-card__avatar">BM</div><span class="ins-card__author">Bayarmaa Munkhbat</span><span class="ins-card__dot">•</span><span class="ins-card__date">May 30, 2024</span></div></div></article>
+          <article class="ins-card fade-up" data-cat="ESG"><div class="ins-card__thumb">ESG</div><div class="ins-card__body"><div class="ins-card__top"><span class="ins-card__cat">ESG</span><span class="ins-card__read-time">4 min read</span></div><div class="ins-card__title">Why Mongolia's Mining Sector Must Lead on ESG — And How FARO Is Helping</div><p class="ins-card__excerpt">Mongolia's mining industry contributes over 25% of GDP but lags global peers on environmental disclosure and community engagement.</p><div class="ins-card__tags"><span class="ins-card__tag">Mining</span><span class="ins-card__tag">Environment</span><span class="ins-card__tag">Community</span></div><div class="ins-card__footer"><div class="ins-card__avatar">SB</div><span class="ins-card__author">Saruul Batbold</span><span class="ins-card__dot">•</span><span class="ins-card__date">April 2, 2024</span></div></div></article>
+        </div>
+        <div class="ins-load-more" id="load-more-wrap">
+          <button class="ins-load-btn" id="load-more-btn">Load more articles ↓</button>
+        </div>
+        <div class="ins-cta-strip fade-up">
+          <div class="ins-cta-strip__left"><h2>Stay ahead of the conversation</h2><p>Get FARO's latest articles, research briefs, and impact updates delivered to your inbox — no more than twice a month.</p></div>
+          <form class="ins-cta-strip__form" onsubmit="handleStripSubmit(event)"><input type="email" placeholder="Your email address" required/><button type="submit">Subscribe</button></form>
+        </div>
+      </div>
+      <aside class="ins-sidebar">
+        <div class="sidebar-block">
+          <div class="sidebar-block__title">Browse by topic</div>
+          <div class="sidebar-topic" data-filter="Digital Transformation"><span class="sidebar-topic__name">Digital Transformation</span><span class="sidebar-topic__count">8</span></div>
+          <div class="sidebar-topic" data-filter="Cyber Safety"><span class="sidebar-topic__name">Cyber Safety</span><span class="sidebar-topic__count">6</span></div>
+          <div class="sidebar-topic" data-filter="ESG"><span class="sidebar-topic__name">ESG</span><span class="sidebar-topic__count">4</span></div>
+          <div class="sidebar-topic" data-filter="Public Health"><span class="sidebar-topic__name">Public Health</span><span class="sidebar-topic__count">3</span></div>
+          <div class="sidebar-topic" data-filter="Policy"><span class="sidebar-topic__name">Policy</span><span class="sidebar-topic__count">3</span></div>
+          <div class="sidebar-topic" data-filter="Impact Report"><span class="sidebar-topic__name">Impact Reports</span><span class="sidebar-topic__count">2</span></div>
+        </div>
+        <div class="sidebar-block">
+          <div class="sidebar-block__title">Most read</div>
+          <div class="sidebar-post"><div class="sidebar-post__num">01</div><div><div class="sidebar-post__title">Bridging the Digital Divide in Rural Mongolia</div><div class="sidebar-post__date">May 2025</div></div></div>
+          <div class="sidebar-post"><div class="sidebar-post__num">02</div><div><div class="sidebar-post__title">Annual Impact Report 2024</div><div class="sidebar-post__date">August 2024</div></div></div>
+          <div class="sidebar-post"><div class="sidebar-post__num">03</div><div><div class="sidebar-post__title">Online Safety for Youth: 2024 Campaign</div><div class="sidebar-post__date">March 2025</div></div></div>
+          <div class="sidebar-post"><div class="sidebar-post__num">04</div><div><div class="sidebar-post__title">ESG Frameworks for Mongolian SMEs</div><div class="sidebar-post__date">January 2025</div></div></div>
+        </div>
+        <div class="sidebar-newsletter">
+          <div class="sidebar-newsletter__title">Get insights in your inbox</div>
+          <p class="sidebar-newsletter__sub">Join 2,400+ readers who follow FARO's research and field updates.</p>
+          <form onsubmit="handleSidebarSubmit(event)"><input type="email" placeholder="Your email" required/><button type="submit">Subscribe →</button></form>
+        </div>
+      </aside>
+    </div>
+  </div></div>
+</section>
+</div><!-- /page-insights -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: KNOWLEDGE HUB
+════════════════════════════════════════ -->
+<div id="page-hub" class="spa-page">
+<section class="page-hero">
+  <div class="padding-global"><div class="container-small">
+    <div class="text-style-tagline page-hero__tag">Knowledge Hub</div>
+    <h1 class="page-hero__h1">Resources That Create Real Impact</h1>
+    <p class="page-hero__sub">Practical frameworks, curricula, and training materials developed by FARO to equip individuals and organizations for a rapidly evolving world.</p>
+  </div></div>
+</section>
+<div style="background:#ebf4ef;">
+  <div class="padding-global"><div class="container-large">
+    <div class="hub-section fade-up">
+      <div class="hub-section__inner">
+        <div class="hub-section__text">
+          <div class="hub-section__number">— Resource 01</div>
+          <h2 class="hub-section__title">Digital Literacy &amp; Online Safety</h2>
+          <p class="hub-section__desc">Our flagship curricula and toolkits help students, educators, and communities build the skills to navigate the digital world safely, critically, and confidently.</p>
+          <ul class="hub-section__list"><li class="hub-section__list-item">Digital Literacy Curriculum for Secondary Schools</li><li class="hub-section__list-item">Train-the-Trainer: Digital Safety for Educators</li><li class="hub-section__list-item">Online Safety Guide for Parents &amp; Communities</li></ul>
+          <a href="resource.html#digital-literacy" class="hub-section__cta">Explore Resources →</a>
+        </div>
+        <div class="hub-section__image"><img src="Pictures/Project/We Think Digital.jpg" alt="Digital Literacy"/></div>
+      </div>
+    </div>
+    <div class="hub-section fade-up">
+      <div class="hub-section__inner reverse">
+        <div class="hub-section__text">
+          <div class="hub-section__number">— Resource 02</div>
+          <h2 class="hub-section__title">Cybersecurity &amp; Digital Transformation</h2>
+          <p class="hub-section__desc">Practical toolkits and research supporting organizations in strengthening their cybersecurity posture and embracing responsible digital transformation.</p>
+          <ul class="hub-section__list"><li class="hub-section__list-item">Cybersecurity Awareness Toolkit for SMEs</li><li class="hub-section__list-item">Digital Transformation Readiness Framework</li><li class="hub-section__list-item">AI Literacy &amp; Responsible Use Guide</li></ul>
+          <a href="resource.html#cybersecurity" class="hub-section__cta">Explore Resources →</a>
+        </div>
+        <div class="hub-section__image"><img src="Pictures/Project/GlobalMilweek2023.jpeg" alt="Cybersecurity"/></div>
+      </div>
+    </div>
+    <div class="hub-section fade-up">
+      <div class="hub-section__inner">
+        <div class="hub-section__text">
+          <div class="hub-section__number">— Resource 03</div>
+          <h2 class="hub-section__title">Public Health Resources</h2>
+          <p class="hub-section__desc">Research and field studies addressing healthcare access, digital health infrastructure, and community health capacity across Central Asia.</p>
+          <ul class="hub-section__list"><li class="hub-section__list-item">Digital Health Readiness in Rural Mongolia</li><li class="hub-section__list-item">Community Health Literacy Toolkit</li><li class="hub-section__list-item">Mental Health Awareness Campaign Materials</li></ul>
+          <a href="resource.html#public-health" class="hub-section__cta">Explore Resources →</a>
+        </div>
+        <div class="hub-section__image"><img src="Pictures/Project/Share.jpg" alt="Public Health"/></div>
+      </div>
+    </div>
+    <div class="hub-section fade-up">
+      <div class="hub-section__inner reverse">
+        <div class="hub-section__text">
+          <div class="hub-section__number">— Resource 04</div>
+          <h2 class="hub-section__title">Policy &amp; Advocacy</h2>
+          <p class="hub-section__desc">Evidence-based policy briefs and advocacy materials designed to influence national frameworks for online safety, digital rights, and inclusive governance.</p>
+          <ul class="hub-section__list"><li class="hub-section__list-item">Recommendations for a National Online Safety Law</li><li class="hub-section__list-item">Child Online Protection Policy Brief</li><li class="hub-section__list-item">Misinformation &amp; Media Literacy Framework</li></ul>
+          <a href="resource.html#policy-advocacy" class="hub-section__cta">Explore Resources →</a>
+        </div>
+        <div class="hub-section__image"><img src="Pictures/Project/GlobalMilweek2025.jpg" alt="Policy and Advocacy"/></div>
+      </div>
+    </div>
+    <div class="hub-section fade-up">
+      <div class="hub-section__inner">
+        <div class="hub-section__text">
+          <div class="hub-section__number">— Resource 05</div>
+          <h2 class="hub-section__title">ESG &amp; Sustainability</h2>
+          <p class="hub-section__desc">Starter packs and reporting guides helping Mongolian corporations integrate environmental, social, and governance principles into their operations.</p>
+          <ul class="hub-section__list"><li class="hub-section__list-item">ESG Starter Pack for Mongolian Corporations</li><li class="hub-section__list-item">State of Digital Inclusion in Central Asia 2024</li><li class="hub-section__list-item">Corporate Social Responsibility Handbook</li></ul>
+          <a href="resource.html#esg" class="hub-section__cta">Explore Resources →</a>
+        </div>
+        <div class="hub-section__image"><img src="Pictures/Project/Dice.jpg" alt="ESG and Sustainability"/></div>
+      </div>
+    </div>
+    <div class="hub-cta-banner fade-up">
+      <div class="hub-cta-banner__text"><div class="hub-cta-banner__tag">Partner With Us</div><div class="hub-cta-banner__title">Want to co-develop resources with FARO?</div></div>
+      <a href="#" onclick="navigate('contact');return false;" class="hub-cta-banner__cta">Get in Touch →</a>
+    </div>
+  </div></div>
+</div>
+</div><!-- /page-hub -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: CAREERS
+════════════════════════════════════════ -->
+<div id="page-careers" class="spa-page">
+<section class="page-hero">
+  <div class="padding-global"><div class="container-small">
+    <div class="text-style-tagline page-hero__tag">Careers</div>
+    <h1 class="page-hero__h1">Join a team driving real change</h1>
+    <p class="page-hero__sub">We're looking for passionate individuals who want to apply their skills where they matter most — across technology, health, policy, and education.</p>
+  </div></div>
+</section>
+<section style="background:var(--pearl);">
+  <div class="padding-global"><div class="container-large">
+    <div class="text-align-center" style="padding-top:4rem;">
+      <div class="text-style-tagline" style="margin-bottom:0.75rem;">Why FARO</div>
+      <h2 class="heading-style-h2">A mission you can believe in</h2>
+    </div>
+    <div class="careers-values">
+      <div class="cv-card fade-up"><div class="cv-card__icon">IM</div><div class="cv-card__title">Real-world impact</div><p class="cv-card__desc">Your work directly shapes programs that reach thousands of individuals across Mongolia and Central Asia.</p></div>
+      <div class="cv-card fade-up"><div class="cv-card__icon">GR</div><div class="cv-card__title">Growth-oriented culture</div><p class="cv-card__desc">We invest in continuous learning, mentorship, and professional development for every team member.</p></div>
+      <div class="cv-card fade-up"><div class="cv-card__icon">CO</div><div class="cv-card__title">Collaborative environment</div><p class="cv-card__desc">Work alongside experts from development, technology, policy, and civil society — locally and globally.</p></div>
+      <div class="cv-card fade-up"><div class="cv-card__icon">VA</div><div class="cv-card__title">Values-driven work</div><p class="cv-card__desc">Every project is guided by inclusivity, ethical use of technology, and community empowerment.</p></div>
+    </div>
+  </div></div>
+</section>
+<section style="background:var(--pearl);">
+  <div class="padding-global"><div class="container-large">
+    <div class="jobs-section">
+      <div class="jobs-header"><h2>Open Positions</h2><span class="jobs-count">3 openings</span></div>
+      <div class="job-card fade-up"><div class="job-card__info"><div class="job-card__dept">Programs</div><div class="job-card__title">Digital Literacy Program Coordinator</div><div class="job-card__meta"><span class="job-card__tag">Ulaanbaatar, Mongolia</span><span class="job-card__tag">Full-time</span><span class="job-card__tag">Mid-level</span></div></div><a href="#" class="job-card__apply">Apply Now</a></div>
+      <div class="job-card fade-up"><div class="job-card__info"><div class="job-card__dept">Policy &amp; Advocacy</div><div class="job-card__title">Policy Research Analyst</div><div class="job-card__meta"><span class="job-card__tag">Ulaanbaatar, Mongolia</span><span class="job-card__tag">Full-time</span><span class="job-card__tag">Senior</span></div></div><a href="#" class="job-card__apply">Apply Now</a></div>
+      <div class="job-card fade-up"><div class="job-card__info"><div class="job-card__dept">Communications</div><div class="job-card__title">Content &amp; Campaigns Officer</div><div class="job-card__meta"><span class="job-card__tag">Remote / Hybrid</span><span class="job-card__tag">Part-time</span><span class="job-card__tag">Mid-level</span></div></div><a href="#" class="job-card__apply">Apply Now</a></div>
+    </div>
+    <div class="careers-cta fade-up">
+      <h2>Don't see a role that fits?</h2>
+      <p>We're always looking for talented people who share our values. Send us your CV and tell us how you'd like to contribute.</p>
+      <a href="#" onclick="navigate('contact');return false;">Get in touch →</a>
+    </div>
+  </div></div>
+</section>
+</div><!-- /page-careers -->
+
+
+<!-- ══════════════════════════════════════
+     PAGE: CONTACT
+════════════════════════════════════════ -->
+<div id="page-contact" class="spa-page">
+<div class="ct-page">
+  <div class="padding-global"><div class="container-large">
+    <div class="ct-main">
+      <div class="ct-left">
+        <div class="ct-left__eyebrow">Contact Us</div>
+        <h1 class="ct-left__heading">Connect With Our Team</h1>
+        <p class="ct-left__body">We're based in Ulaanbaatar and work across Central Asia. Whether you want to collaborate, volunteer, or simply ask a question — we're happy to hear from you. We typically respond within two business days.</p>
+        <div class="ct-details">
+          <div><div class="ct-detail__label">Email</div><div class="ct-detail__value"><a href="mailto:info@farofoundation.org">info@farofoundation.org</a></div></div>
+          <div><div class="ct-detail__label">Phone</div><div class="ct-detail__value"><a href="tel:+97611000000">+976 11 000 000</a></div></div>
+          <div><div class="ct-detail__label">Office</div><div class="ct-detail__value">Ulaanbaatar, Mongolia</div></div>
+          <div><div class="ct-detail__label">Press enquiries</div><div class="ct-detail__value"><a href="mailto:press@farofoundation.org">press@farofoundation.org</a></div></div>
+        </div>
+        <div class="ct-social">
+          <a href="#" class="ct-social-link" aria-label="Facebook"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" class="ct-social-link" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" class="ct-social-link" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        </div>
+      </div>
+      <div class="ct-form-wrap">
+        <h2>Send us a message</h2>
+        <p>Fill in the form and our team will be in touch shortly.</p>
+        <form id="contact-form" onsubmit="handleContactSubmit(event)">
+          <div class="form-row">
+            <div class="form-group"><label for="cf-fname">First name *</label><input id="cf-fname" type="text" placeholder="First name" required/></div>
+            <div class="form-group"><label for="cf-lname">Last name *</label><input id="cf-lname" type="text" placeholder="Last name" required/></div>
+          </div>
+          <div class="form-group"><label for="cf-email">Email address *</label><input id="cf-email" type="email" placeholder="you@example.com" required/></div>
+          <div class="form-group"><label for="cf-phone">Phone number</label><input id="cf-phone" type="tel" placeholder="+976 (optional)"/></div>
+          <div class="form-group"><label for="cf-topic">How can we help? *</label>
+            <select id="cf-topic" required><option value="" disabled selected>Select a topic</option><option>Partnership &amp; Collaboration</option><option>Volunteer Opportunities</option><option>Media &amp; Press</option><option>Programs &amp; Training</option><option>Donations &amp; Funding</option><option>General Inquiry</option></select>
+          </div>
+          <div class="form-group"><label for="cf-message">Message *</label><textarea id="cf-message" placeholder="Tell us about yourself and how we can help…" required></textarea></div>
+          <button type="submit" class="ct-btn-submit">Send Message →</button>
+        </form>
+        <div class="ct-success" id="contact-success"><div class="ct-success__line"></div><h3>Thanks for reaching out.</h3><p>We've received your message and will get back to you within two business days.</p></div>
+      </div>
+    </div>
+    <hr class="ct-rule"/>
+    <div class="ct-bottom">
+      <div class="ct-bottom__heading">Other ways to work with us</div>
+      <div class="ct-ways">
+        <div><div class="ct-way__label">Partnerships</div><div class="ct-way__title">Partner With Us</div><p class="ct-way__desc">Co-design programs and scale impact through strategic collaboration with FARO Foundation.</p><a href="#" class="ct-way__link">Learn more</a></div>
+        <div><div class="ct-way__label">Volunteers</div><div class="ct-way__title">Give Your Time</div><p class="ct-way__desc">Contribute skills and time to our training sessions, events, and awareness campaigns across Mongolia.</p><a href="#" onclick="navigate('careers');return false;" class="ct-way__link">See opportunities</a></div>
+        <div><div class="ct-way__label">Knowledge</div><div class="ct-way__title">Share Expertise</div><p class="ct-way__desc">Contribute to our Knowledge Hub as a subject-matter expert, researcher, or guest author.</p><a href="#" onclick="navigate('hub');return false;" class="ct-way__link">Visit the Hub</a></div>
+        <div><div class="ct-way__label">Media</div><div class="ct-way__title">Press &amp; Media</div><p class="ct-way__desc">Journalists and media partners can reach our communications team directly for interviews and briefings.</p><a href="mailto:press@farofoundation.org" class="ct-way__link">Email press team</a></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+</div><!-- /page-contact -->
+
+
+<!-- ══ FOOTER ══ -->
+<footer id="footer" class="footer_component">
+  <div class="footer_brand-row"><div class="padding-global"><div class="container-large"><div class="footer_brand-inner">
+    <div class="footer_brand-left">
+      <a href="#" onclick="navigate('home',null,true);return false;" class="footer_logo-link">
+        <img src="assets/logos/horizontal/Faro Foundation new logo_horizontal_primary-01 (1).png" alt="FARO Foundation" class="footer_logo-img"/>
+      </a>
+      <p class="footer_tagline">Equipping communities, corporations, and governments with the tools to operate securely, ethically, and effectively — across Central Asia and beyond.</p>
+      <div class="footer_social">
+        <a href="#" class="footer_social-link" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" class="footer_social-link" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="footer_social-link" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      </div>
+    </div>
+    <div class="footer_newsletter-box">
+      <p class="footer_newsletter-title">Stay connected</p>
+      <p class="footer_newsletter-sub">Be the first to hear about our impact, new programs, and volunteer opportunities.</p>
+      <form class="footer_form" onsubmit="handleFooterSubmit(event)"><input type="email" placeholder="Your email address" class="footer_input" required/><button type="submit" class="footer_btn-subscribe">Subscribe</button></form>
+      <div class="footer_success" id="footer-success">Thank you! Your submission has been received!</div>
+      <p class="footer_privacy">By subscribing you agree with our <a href="#">Privacy Policy</a></p>
+    </div>
+  </div></div></div></div>
+  <div class="footer_nav-row"><div class="padding-global"><div class="container-large"><div class="footer_nav-grid">
+    <div class="footer_nav-col"><p class="footer_col-title">About</p>
+      <a href="#" onclick="navigate('home','mission');return false;" class="footer_nav-link">Our Mission</a>
+      <a href="#" onclick="navigate('home','empower');return false;" class="footer_nav-link">About Us</a>
+      <a href="#" onclick="navigate('home','team');return false;" class="footer_nav-link">Our Team</a>
+      <a href="#" onclick="navigate('home','stats');return false;" class="footer_nav-link">Our Impact</a>
+    </div>
+    <div class="footer_nav-col"><p class="footer_col-title">Programs</p>
+      <a href="#" onclick="navigate('home','projects');return false;" class="footer_nav-link">Our Projects</a>
+      <a href="#" onclick="navigate('home','partners');return false;" class="footer_nav-link">Our Partners</a>
+      <a href="#" onclick="navigate('hub');return false;" class="footer_nav-link">Digital Transformation</a>
+      <a href="#" onclick="navigate('hub');return false;" class="footer_nav-link">Public Health</a>
+      <a href="#" onclick="navigate('hub');return false;" class="footer_nav-link">ESG</a>
+    </div>
+    <div class="footer_nav-col"><p class="footer_col-title">Resources</p>
+      <a href="#" onclick="navigate('insights');return false;" class="footer_nav-link">Insights</a>
+      <a href="#" onclick="navigate('hub');return false;" class="footer_nav-link">Knowledge Hub</a>
+      <a href="#" onclick="navigate('insights');return false;" class="footer_nav-link">Research</a>
+      <a href="#" onclick="navigate('insights');return false;" class="footer_nav-link">Publications</a>
+    </div>
+    <div class="footer_nav-col"><p class="footer_col-title">Get Involved</p>
+      <a href="#" onclick="navigate('careers');return false;" class="footer_nav-link">Careers</a>
+      <a href="#" onclick="navigate('contact');return false;" class="footer_nav-link">Contact Us</a>
+      <a href="#" onclick="navigate('contact');return false;" class="footer_nav-link">Volunteer</a>
+      <a href="#" onclick="navigate('contact');return false;" class="footer_nav-link">Partner With Us</a>
+    </div>
+  </div></div></div></div>
+  <div class="footer_bottom-bar"><div class="padding-global"><div class="container-large"><div class="footer_bottom">
+    <p class="footer_copy">&copy; 2025 FARO Foundation. All rights reserved.</p>
+    <div class="footer_legal"><a href="#" class="footer_legal-link">Privacy Policy</a><a href="#" class="footer_legal-link">Terms of Service</a><a href="#" class="footer_legal-link">Cookie Settings</a></div>
+  </div></div></div></div>
+</footer>
+
+
+<script src="script.js"></script>
+<script>
+/* ══ SPA ROUTER ══ */
+const PAGES = { home:'page-home', insights:'page-insights', hub:'page-hub', careers:'page-careers', contact:'page-contact' };
+
+function scrollToAnchor(anchor) {
+  const el = document.getElementById(anchor);
+  if (el) el.scrollIntoView({ behavior:'smooth' });
+}
+
+function navigate(page, anchor, resetNav) {
+  // hide all
+  document.querySelectorAll('.spa-page').forEach(p => p.classList.remove('active'));
+  // show target
+  const el = document.getElementById(PAGES[page] || 'page-home');
+  if (el) el.classList.add('active');
+  // Home has a dark hero behind a transparent navbar (white links);
+  // every other page has a light background, so make the navbar solid (dark/black links).
+  const navEl = document.getElementById('navbar');
+  if (navEl) navEl.classList.toggle('navbar_component--solid', page !== 'home');
+  // update nav highlights — match page + anchor so About/Projects/Our Team highlight independently
+  document.querySelectorAll('[data-page]').forEach(l => {
+    const pageMatch   = l.dataset.page === page;
+    const anchorMatch = (l.dataset.anchor || '') === (anchor || '');
+    l.style.color = (!resetNav && pageMatch && anchorMatch) ? 'var(--blue)' : '';
+  });
+  // scroll
+  if (anchor) {
+    setTimeout(() => scrollToAnchor(anchor), 60);
+  } else {
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 60);
+  }
+  history.pushState(null, '', '#' + page);
+}
+
+// wire navbar
+document.querySelectorAll('[data-page]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    navigate(link.dataset.page, link.dataset.anchor);
+  });
+});
+
+// popstate (back/forward)
+window.addEventListener('popstate', () => {
+  const h = location.hash.replace('#','');
+  navigate(PAGES[h] ? h : 'home');
+});
+
+// initial load
+(function() {
+  const h = location.hash.replace('#','');
+  navigate(PAGES[h] ? h : 'home');
+})();
+
+/* ══ INSIGHTS FILTERS ══ */
+const filterBtns = document.querySelectorAll('.ins-filter-btn');
+const sideTopics  = document.querySelectorAll('.sidebar-topic');
+const cards       = document.querySelectorAll('#articles-grid .ins-card');
+
+function applyFilter(cat) {
+  cards.forEach(c => { c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none'; });
+  filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === cat));
+}
+filterBtns.forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
+sideTopics.forEach(t => t.addEventListener('click', () => {
+  applyFilter(t.dataset.filter);
+  document.querySelector('.ins-filters').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}));
+
+document.getElementById('ins-search').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  cards.forEach(c => { c.style.display = (!q || c.textContent.toLowerCase().includes(q)) ? '' : 'none'; });
+  if (q) filterBtns.forEach(b => b.classList.remove('active'));
+  else filterBtns[0].classList.add('active');
+});
+
+/* ══ ARTICLE CARD LINKS ══ */
+const articleLinks = [
+  'insight-youth-safety.html','insight-esg-smes.html','insight-digital-health.html',
+  'insight-tech-policy.html','insight-annual-report.html','insight-egovernment.html',
+  'insight-cyberbullying.html','insight-esg-smes.html'
+];
+cards.forEach((card, i) => {
+  if (articleLinks[i]) {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => location.href = articleLinks[i]);
+  }
+});
+
+/* ══ LOAD MORE ══ */
+document.getElementById('load-more-btn').addEventListener('click', function() {
+  this.textContent = 'No more articles right now — check back soon!';
+  this.disabled = true; this.style.opacity = '0.5';
+});
+
+/* ══ FORMS ══ */
+function handleContactSubmit(e) {
+  e.preventDefault();
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('contact-success').style.display = 'block';
+}
+function handleStripSubmit(e) {
+  e.preventDefault();
+  e.target.innerHTML = '<p style="color:#fff;font-weight:700;margin:0">✓ You\'re subscribed!</p>';
+}
+function handleSidebarSubmit(e) {
+  e.preventDefault();
+  e.target.innerHTML = '<p style="color:rgba(255,255,255,0.85);font-weight:700;margin:0.5rem 0">✓ Subscribed — thank you!</p>';
+}
+function handleFooterSubmit(e) {
+  e.preventDefault();
+  document.getElementById('footer-success').style.display = 'block';
+}
+</script>
+</body>
+</html>

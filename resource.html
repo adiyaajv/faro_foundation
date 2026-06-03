@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resources — FARO Foundation</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .rd-page { background:var(--pearl); padding-top:var(--nav-h); }
+    .rd-hero { padding:4rem 0 0; background:var(--pearl); }
+    .rd-breadcrumb { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; font-weight:600; color:var(--muted); margin-bottom:1.5rem; }
+    .rd-breadcrumb a { color:var(--blue); text-decoration:none; }
+    .rd-breadcrumb a:hover { text-decoration:underline; }
+    .rd-breadcrumb span { opacity:0.5; }
+    .rd-hero__tag   { color:var(--blue); margin-bottom:1rem; }
+    .rd-hero__title { font-size:clamp(2.2rem,5vw,3.6rem); font-weight:800; line-height:1.1; letter-spacing:-0.02em; color:var(--dark-blue); margin-bottom:1.25rem; }
+    .rd-hero__desc  { font-size:1.05rem; color:var(--muted); line-height:1.75; max-width:600px; margin-bottom:2.5rem; }
+    .rd-hero__image { width:100%; aspect-ratio:21/8; object-fit:cover; border-radius:var(--r16) var(--r16) 0 0; display:block; margin-top:1rem; }
+    .rd-about { padding:4rem 0; border-bottom:1px solid var(--border); }
+    .rd-two-col { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+    .rd-section-tag { color:var(--blue); margin-bottom:0.75rem; }
+    .rd-about__title { font-size:1.75rem; font-weight:800; line-height:1.2; letter-spacing:-0.02em; color:var(--dark-blue); margin-bottom:1rem; }
+    .rd-about__text  { font-size:0.97rem; color:var(--muted); line-height:1.8; margin-bottom:0.9rem; }
+    .rd-goals-title  { font-size:1rem; font-weight:700; color:var(--dark-blue); margin-bottom:1rem; }
+    .rd-goals-list   { display:flex; flex-direction:column; gap:0.65rem; }
+    .rd-goals-item   { display:flex; gap:0.75rem; align-items:flex-start; font-size:0.9rem; color:var(--dark-blue); line-height:1.6; }
+    .rd-goals-item__num { flex-shrink:0; font-size:0.7rem; font-weight:700; letter-spacing:0.08em; color:var(--blue); margin-top:0.25em; min-width:1.5rem; }
+    .rd-resources { padding:4rem 0; }
+    .rd-resources__heading { font-size:1.6rem; font-weight:800; color:var(--dark-blue); letter-spacing:-0.02em; margin-bottom:0.5rem; }
+    .rd-resources__sub { font-size:0.95rem; color:var(--muted); margin-bottom:2.5rem; }
+    .rd-card-list { display:flex; flex-direction:column; gap:1rem; }
+    .rd-card { background:#fff; border:1px solid var(--border); border-radius:var(--r16); padding:1.75rem 2rem; display:flex; align-items:center; gap:1.5rem; transition:box-shadow 0.2s,transform 0.2s; }
+    .rd-card:hover { box-shadow:0 8px 28px rgba(21,58,67,0.1); transform:translateY(-2px); }
+    .rd-card__icon { flex-shrink:0; width:3rem; height:3rem; background:rgba(126,212,234,0.18); border-radius:var(--r8); display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:900; letter-spacing:0.06em; color:var(--dark-blue); }
+    .rd-card__body { flex:1; min-width:0; }
+    .rd-card__type  { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue); margin-bottom:0.3rem; }
+    .rd-card__title { font-size:1rem; font-weight:700; color:var(--dark-blue); line-height:1.35; margin-bottom:0.35rem; }
+    .rd-card__desc  { font-size:0.85rem; color:var(--muted); line-height:1.6; }
+    .rd-card__download { flex-shrink:0; display:inline-flex; align-items:center; gap:6px; padding:0.6rem 1.25rem; background:var(--dark-blue); color:#fff; font-size:0.82rem; font-weight:700; border-radius:var(--r8); text-decoration:none; transition:background 0.2s; white-space:nowrap; }
+    .rd-card__download:hover { background:var(--blue); }
+    .rd-cta { background:var(--dark-blue); border-radius:var(--r16); padding:3rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; flex-wrap:wrap; margin:2rem 0 5rem; }
+    .rd-cta__tag   { font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--light-blue); margin-bottom:0.5rem; }
+    .rd-cta__title { font-size:1.4rem; font-weight:800; color:#fff; line-height:1.2; }
+    .rd-cta__btn   { flex-shrink:0; display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--dark-blue); font-weight:700; font-size:0.9rem; padding:0.8rem 1.75rem; border-radius:var(--r8); text-decoration:none; transition:opacity 0.2s; }
+    .rd-cta__btn:hover { opacity:0.85; }
+    @media(max-width:768px){.rd-two-col{grid-template-columns:1fr;gap:2rem;}.rd-card{flex-wrap:wrap;}.rd-card__download{width:100%;justify-content:center;}.rd-cta{padding:2rem;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar_component navbar_component--solid" id="navbar">
+  <div class="navbar_container">
+    <a href="index.html" class="navbar_logo-link"><img src="assets/logos/horizontal/Faro Foundation new logo_horizontal_primary-01 (1).png" alt="FARO Foundation" class="navbar_logo-img"/></a>
+    <button class="menu-icon1" id="hamburger" aria-label="Toggle menu"><div class="menu-icon1_line-top"></div><div class="menu-icon1_line-middle"></div><div class="menu-icon1_line-bottom"></div></button>
+    <nav class="navbar_menu" id="nav-menu">
+      <div class="navbar_menu-links">
+        <a href="index.html#home"     class="navbar_link">About</a>
+        <a href="index.html#home"     class="navbar_link">Projects</a>
+        <a href="index.html#insights" class="navbar_link">Insights</a>
+        <a href="index.html#hub"      class="navbar_link" style="color:var(--blue)">Knowledge Hub</a>
+        <a href="index.html#careers"  class="navbar_link">Careers</a>
+        <a href="index.html#home"     class="navbar_link">Our Team</a>
+        <a href="index.html#contact"  class="navbar_link">Contact</a>
+      </div>
+      <div class="navbar_menu-buttons"><button class="navbar_search" aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button></div>
+    </nav>
+  </div>
+</nav>
+
+<!-- ══ RESOURCE SECTIONS ══ -->
+
+<div class="rd-section" id="digital-literacy">
+<div class="rd-page"><div class="rd-hero"><div class="padding-global"><div class="container-large">
+  <div class="rd-breadcrumb"><a href="index.html#hub">Knowledge Hub</a><span>/</span><span>Digital Literacy &amp; Online Safety</span></div>
+  <div class="text-style-tagline rd-hero__tag">Resource 01</div>
+  <h1 class="rd-hero__title">Digital Literacy &amp;<br>Online Safety</h1>
+  <p class="rd-hero__desc">Our flagship curricula and toolkits help students, educators, and communities build the skills to navigate the digital world safely, critically, and confidently.</p>
+</div></div></div>
+<div class="padding-global"><div class="container-large"><img src="Pictures/Project/We Think Digital.jpg" alt="" class="rd-hero__image"/></div></div>
+</div>
+<section class="rd-about" style="background:var(--pearl);"><div class="padding-global"><div class="container-large"><div class="rd-two-col">
+  <div><div class="text-style-tagline rd-section-tag">About This Resource Area</div><h2 class="rd-about__title">Building confident, critical digital citizens</h2><p class="rd-about__text">FARO Foundation's digital literacy resources are designed to bridge the gap between access to technology and the ability to use it safely and critically. From secondary school curricula to trainer guides, our materials are grounded in real-world use cases facing Mongolian communities.</p><p class="rd-about__text">All materials are freely available for download and have been co-developed with educators, government partners, and international organizations including Meta and DW Akademie.</p></div>
+  <div><p class="rd-goals-title">Key Objectives</p><ul class="rd-goals-list"><li class="rd-goals-item"><span class="rd-goals-item__num">01</span><span>Equip students with the skills to identify and resist misinformation online</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">02</span><span>Train educators to confidently deliver digital safety content in classrooms</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">03</span><span>Empower parents and caregivers with practical online safety guidance</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">04</span><span>Support policy frameworks for digital literacy in national education systems</span></li></ul></div>
+</div></div></div></section>
+<section class="rd-resources" style="background:var(--pearl);"><div class="padding-global"><div class="container-large">
+  <h2 class="rd-resources__heading">Available Resources</h2><p class="rd-resources__sub">Download any of the materials below — all free to use and adapt with attribution.</p>
+  <div class="rd-card-list">
+    <div class="rd-card"><div class="rd-card__icon">DL</div><div class="rd-card__body"><div class="rd-card__type">Curriculum</div><div class="rd-card__title">Digital Literacy Curriculum for Secondary Schools</div><p class="rd-card__desc">Our flagship curriculum covering online safety, critical thinking, data privacy, and responsible technology use — designed for students aged 14–18 across Mongolia.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">TT</div><div class="rd-card__body"><div class="rd-card__type">Training Materials</div><div class="rd-card__title">Train-the-Trainer: Digital Safety for Educators</div><p class="rd-card__desc">A complete facilitator's guide for educators running digital safety workshops with students and parents. Includes session plans, slides, and activities.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">OS</div><div class="rd-card__body"><div class="rd-card__type">Toolkit</div><div class="rd-card__title">Online Safety Guide for Parents &amp; Communities</div><p class="rd-card__desc">A practical, accessible guide helping families understand online risks, parental controls, and how to have open conversations about internet safety with children.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+  </div>
+  <div class="rd-cta"><div><div class="rd-cta__tag">Collaborate With Us</div><div class="rd-cta__title">Want to adapt or co-develop these materials?</div></div><a href="index.html#contact" class="rd-cta__btn">Get in Touch →</a></div>
+</div></div></section></div>
+
+<div class="rd-section" id="cybersecurity">
+<div class="rd-page"><div class="rd-hero"><div class="padding-global"><div class="container-large">
+  <div class="rd-breadcrumb"><a href="index.html#hub">Knowledge Hub</a><span>/</span><span>Cybersecurity &amp; Digital Transformation</span></div>
+  <div class="text-style-tagline rd-hero__tag">Resource 02</div>
+  <h1 class="rd-hero__title">Cybersecurity &amp;<br>Digital Transformation</h1>
+  <p class="rd-hero__desc">Practical toolkits and research supporting organizations in strengthening their cybersecurity posture and embracing responsible digital transformation.</p>
+</div></div></div>
+<div class="padding-global"><div class="container-large"><img src="Pictures/Project/GlobalMilweek2023.jpeg" alt="" class="rd-hero__image"/></div></div>
+</div>
+<section class="rd-about" style="background:var(--pearl);"><div class="padding-global"><div class="container-large"><div class="rd-two-col">
+  <div><div class="text-style-tagline rd-section-tag">About This Resource Area</div><h2 class="rd-about__title">Securing organizations for the digital age</h2><p class="rd-about__text">As digital threats evolve and organizations accelerate their transformation, FARO Foundation provides the practical guidance to help SMEs, government bodies, and civil society navigate cybersecurity with confidence.</p><p class="rd-about__text">Our toolkits are designed to be accessible to non-technical teams, providing step-by-step frameworks that don't require specialized IT staff to implement effectively.</p></div>
+  <div><p class="rd-goals-title">Key Objectives</p><ul class="rd-goals-list"><li class="rd-goals-item"><span class="rd-goals-item__num">01</span><span>Raise organizational awareness of common cyber threats and preventive measures</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">02</span><span>Provide actionable frameworks for digital transformation that prioritize ethics</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">03</span><span>Support responsible AI adoption across the public and private sectors</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">04</span><span>Build lasting internal capacity rather than reliance on external consultants</span></li></ul></div>
+</div></div></div></section>
+<section class="rd-resources" style="background:var(--pearl);"><div class="padding-global"><div class="container-large">
+  <h2 class="rd-resources__heading">Available Resources</h2><p class="rd-resources__sub">Download any of the materials below — all free to use and adapt with attribution.</p>
+  <div class="rd-card-list">
+    <div class="rd-card"><div class="rd-card__icon">CS</div><div class="rd-card__body"><div class="rd-card__type">Toolkit</div><div class="rd-card__title">Cybersecurity Awareness Toolkit for SMEs</div><p class="rd-card__desc">Step-by-step guidance for small businesses to assess and improve their cybersecurity posture without specialized IT staff.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">DT</div><div class="rd-card__body"><div class="rd-card__type">Framework</div><div class="rd-card__title">Digital Transformation Readiness Framework</div><p class="rd-card__desc">A structured assessment tool helping organizations evaluate their digital maturity and plan a responsible transformation roadmap.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">AI</div><div class="rd-card__body"><div class="rd-card__type">Guide</div><div class="rd-card__title">AI Literacy &amp; Responsible Use Guide</div><p class="rd-card__desc">An accessible introduction to artificial intelligence concepts, risks, and ethical guidelines for organizations beginning their AI journey.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+  </div>
+  <div class="rd-cta"><div><div class="rd-cta__tag">Collaborate With Us</div><div class="rd-cta__title">Want to adapt or co-develop these materials?</div></div><a href="index.html#contact" class="rd-cta__btn">Get in Touch →</a></div>
+</div></div></section></div>
+
+<div class="rd-section" id="public-health">
+<div class="rd-page"><div class="rd-hero"><div class="padding-global"><div class="container-large">
+  <div class="rd-breadcrumb"><a href="index.html#hub">Knowledge Hub</a><span>/</span><span>Public Health Resources</span></div>
+  <div class="text-style-tagline rd-hero__tag">Resource 03</div>
+  <h1 class="rd-hero__title">Public Health<br>Resources</h1>
+  <p class="rd-hero__desc">Research and field studies addressing healthcare access, digital health infrastructure, and community health capacity across Central Asia.</p>
+</div></div></div>
+<div class="padding-global"><div class="container-large"><img src="Pictures/Project/Share.jpg" alt="" class="rd-hero__image"/></div></div>
+</div>
+<section class="rd-about" style="background:var(--pearl);"><div class="padding-global"><div class="container-large"><div class="rd-two-col">
+  <div><div class="text-style-tagline rd-section-tag">About This Resource Area</div><h2 class="rd-about__title">Strengthening health systems through knowledge</h2><p class="rd-about__text">FARO Foundation's public health work focuses on bridging the gap between health knowledge and community action. Our research illuminates infrastructure gaps, while our toolkits equip frontline workers and community leaders to respond.</p><p class="rd-about__text">These resources draw on field studies conducted across Mongolia's urban and rural aimags, in partnership with international health organizations and local civil society groups.</p></div>
+  <div><p class="rd-goals-title">Key Objectives</p><ul class="rd-goals-list"><li class="rd-goals-item"><span class="rd-goals-item__num">01</span><span>Document and address digital health infrastructure gaps in rural communities</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">02</span><span>Equip community health workers with accessible, evidence-based materials</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">03</span><span>Reduce stigma around mental health through public awareness campaigns</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">04</span><span>Advocate for inclusive health policy that reaches underserved populations</span></li></ul></div>
+</div></div></div></section>
+<section class="rd-resources" style="background:var(--pearl);"><div class="padding-global"><div class="container-large">
+  <h2 class="rd-resources__heading">Available Resources</h2><p class="rd-resources__sub">Download any of the materials below — all free to use and adapt with attribution.</p>
+  <div class="rd-card-list">
+    <div class="rd-card"><div class="rd-card__icon">PH</div><div class="rd-card__body"><div class="rd-card__type">Research</div><div class="rd-card__title">Digital Health Readiness in Rural Mongolia</div><p class="rd-card__desc">A field study examining infrastructure gaps and opportunities for digital health adoption in remote aimags.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">CH</div><div class="rd-card__body"><div class="rd-card__type">Toolkit</div><div class="rd-card__title">Community Health Literacy Toolkit</div><p class="rd-card__desc">A practical resource for community health workers and NGOs to improve health communication and promote preventive care in underserved areas.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">MH</div><div class="rd-card__body"><div class="rd-card__type">Campaign Materials</div><div class="rd-card__title">Mental Health Awareness Campaign Materials</div><p class="rd-card__desc">Ready-to-use posters, social media assets, and facilitator scripts from FARO's national mental health awareness campaign.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+  </div>
+  <div class="rd-cta"><div><div class="rd-cta__tag">Collaborate With Us</div><div class="rd-cta__title">Want to adapt or co-develop these materials?</div></div><a href="index.html#contact" class="rd-cta__btn">Get in Touch →</a></div>
+</div></div></section></div>
+
+<div class="rd-section" id="policy-advocacy">
+<div class="rd-page"><div class="rd-hero"><div class="padding-global"><div class="container-large">
+  <div class="rd-breadcrumb"><a href="index.html#hub">Knowledge Hub</a><span>/</span><span>Policy &amp; Advocacy</span></div>
+  <div class="text-style-tagline rd-hero__tag">Resource 04</div>
+  <h1 class="rd-hero__title">Policy &amp;<br>Advocacy</h1>
+  <p class="rd-hero__desc">Evidence-based policy briefs and advocacy materials designed to influence national frameworks for online safety, digital rights, and inclusive governance.</p>
+</div></div></div>
+<div class="padding-global"><div class="container-large"><img src="Pictures/Project/GlobalMilweek2025.jpg" alt="" class="rd-hero__image"/></div></div>
+</div>
+<section class="rd-about" style="background:var(--pearl);"><div class="padding-global"><div class="container-large"><div class="rd-two-col">
+  <div><div class="text-style-tagline rd-section-tag">About This Resource Area</div><h2 class="rd-about__title">Shaping the policies that protect communities</h2><p class="rd-about__text">FARO Foundation's policy work translates on-the-ground insights into actionable legislative recommendations. We engage with parliament, regulatory bodies, and civil society to push for safer, more inclusive digital environments.</p><p class="rd-about__text">Our briefs are used by legislators, NGOs, and international organizations as reference documents in policy design. They are freely available to support advocacy efforts across the region.</p></div>
+  <div><p class="rd-goals-title">Key Objectives</p><ul class="rd-goals-list"><li class="rd-goals-item"><span class="rd-goals-item__num">01</span><span>Develop evidence-based recommendations for national online safety legislation</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">02</span><span>Protect children's rights in digital spaces through targeted policy advocacy</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">03</span><span>Combat misinformation through regulatory and educational frameworks</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">04</span><span>Strengthen civil society's capacity to engage in legislative processes</span></li></ul></div>
+</div></div></div></section>
+<section class="rd-resources" style="background:var(--pearl);"><div class="padding-global"><div class="container-large">
+  <h2 class="rd-resources__heading">Available Resources</h2><p class="rd-resources__sub">Download any of the materials below — all free to use and adapt with attribution.</p>
+  <div class="rd-card-list">
+    <div class="rd-card"><div class="rd-card__icon">PB</div><div class="rd-card__body"><div class="rd-card__type">Policy Brief</div><div class="rd-card__title">Recommendations for a National Online Safety Law</div><p class="rd-card__desc">Our policy position paper submitted to the Mongolian parliament outlining legislative priorities for online safety and platform accountability.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">CP</div><div class="rd-card__body"><div class="rd-card__type">Policy Brief</div><div class="rd-card__title">Child Online Protection Policy Brief</div><p class="rd-card__desc">A comprehensive brief outlining regulatory gaps in child online protection and specific recommendations for legislative reform aligned with international standards.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">ML</div><div class="rd-card__body"><div class="rd-card__type">Framework</div><div class="rd-card__title">Misinformation &amp; Media Literacy Framework</div><p class="rd-card__desc">A policy and education framework for combating misinformation, including regulatory suggestions and a media literacy integration model for schools.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+  </div>
+  <div class="rd-cta"><div><div class="rd-cta__tag">Collaborate With Us</div><div class="rd-cta__title">Want to adapt or co-develop these materials?</div></div><a href="index.html#contact" class="rd-cta__btn">Get in Touch →</a></div>
+</div></div></section></div>
+
+<div class="rd-section" id="esg">
+<div class="rd-page"><div class="rd-hero"><div class="padding-global"><div class="container-large">
+  <div class="rd-breadcrumb"><a href="index.html#hub">Knowledge Hub</a><span>/</span><span>ESG &amp; Sustainability</span></div>
+  <div class="text-style-tagline rd-hero__tag">Resource 05</div>
+  <h1 class="rd-hero__title">ESG &amp;<br>Sustainability</h1>
+  <p class="rd-hero__desc">Starter packs and reporting guides helping Mongolian corporations integrate environmental, social, and governance principles into their operations.</p>
+</div></div></div>
+<div class="padding-global"><div class="container-large"><img src="Pictures/Project/Dice.jpg" alt="" class="rd-hero__image"/></div></div>
+</div>
+<section class="rd-about" style="background:var(--pearl);"><div class="padding-global"><div class="container-large"><div class="rd-two-col">
+  <div><div class="text-style-tagline rd-section-tag">About This Resource Area</div><h2 class="rd-about__title">Embedding responsibility into business practice</h2><p class="rd-about__text">As ESG reporting becomes a global standard, Mongolian corporations face pressure to align with international frameworks. FARO Foundation bridges the gap with practical, accessible resources that don't assume existing expertise.</p><p class="rd-about__text">Our ESG materials draw on established frameworks — GRI, SASB, and UN SDGs — and adapt them to the realities of the Mongolian business environment.</p></div>
+  <div><p class="rd-goals-title">Key Objectives</p><ul class="rd-goals-list"><li class="rd-goals-item"><span class="rd-goals-item__num">01</span><span>Lower the barrier to entry for ESG reporting among Mongolian SMEs and corporates</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">02</span><span>Align local business practices with international sustainability standards</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">03</span><span>Document and close digital inclusion gaps across Central Asia</span></li><li class="rd-goals-item"><span class="rd-goals-item__num">04</span><span>Promote corporate social responsibility as a driver of long-term growth</span></li></ul></div>
+</div></div></div></section>
+<section class="rd-resources" style="background:var(--pearl);"><div class="padding-global"><div class="container-large">
+  <h2 class="rd-resources__heading">Available Resources</h2><p class="rd-resources__sub">Download any of the materials below — all free to use and adapt with attribution.</p>
+  <div class="rd-card-list">
+    <div class="rd-card"><div class="rd-card__icon">ESG</div><div class="rd-card__body"><div class="rd-card__type">Toolkit</div><div class="rd-card__title">ESG Starter Pack for Mongolian Corporations</div><p class="rd-card__desc">A practical introduction to ESG reporting standards, with templates and guidance for first-time reporters in the Mongolian market.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">RI</div><div class="rd-card__body"><div class="rd-card__type">Research</div><div class="rd-card__title">State of Digital Inclusion in Central Asia 2024</div><p class="rd-card__desc">Regional analysis of internet access, digital skills, and barriers to inclusion across five Central Asian countries — with policy recommendations.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+    <div class="rd-card"><div class="rd-card__icon">CSR</div><div class="rd-card__body"><div class="rd-card__type">Guide</div><div class="rd-card__title">Corporate Social Responsibility Handbook</div><p class="rd-card__desc">A step-by-step handbook for establishing a CSR program from scratch — covering strategy, stakeholder engagement, reporting, and impact measurement.</p></div><a href="#" class="rd-card__download"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF</a></div>
+  </div>
+  <div class="rd-cta"><div><div class="rd-cta__tag">Collaborate With Us</div><div class="rd-cta__title">Want to adapt or co-develop these materials?</div></div><a href="index.html#contact" class="rd-cta__btn">Get in Touch →</a></div>
+</div></div></section></div>
+
+<footer id="footer" class="footer_component">
+  <div class="footer_brand-row"><div class="padding-global"><div class="container-large"><div class="footer_brand-inner">
+    <div class="footer_brand-left"><a href="index.html" class="footer_logo-link"><img src="assets/logos/horizontal/Faro Foundation new logo_horizontal_primary-01 (1).png" alt="FARO Foundation" class="footer_logo-img"/></a><p class="footer_tagline">Equipping communities, corporations, and governments with the tools to operate securely, ethically, and effectively — across Central Asia and beyond.</p><div class="footer_social"><a href="#" class="footer_social-link" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="#" class="footer_social-link" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a><a href="#" class="footer_social-link" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></div></div>
+    <div class="footer_newsletter-box"><p class="footer_newsletter-title">Stay connected</p><p class="footer_newsletter-sub">Be the first to hear about our impact, new programs, and volunteer opportunities.</p><form class="footer_form" onsubmit="handleFooterSubmit(event)"><input type="email" placeholder="Your email address" class="footer_input" required/><button type="submit" class="footer_btn-subscribe">Subscribe</button></form><div class="footer_success" id="footer-success">Thank you! Your submission has been received!</div><p class="footer_privacy">By subscribing you agree with our <a href="#">Privacy Policy</a></p></div>
+  </div></div></div></div>
+  <div class="footer_bottom-bar"><div class="padding-global"><div class="container-large"><div class="footer_bottom"><p class="footer_copy">&copy; 2025 FARO Foundation. All rights reserved.</p><div class="footer_legal"><a href="#" class="footer_legal-link">Privacy Policy</a><a href="#" class="footer_legal-link">Terms of Service</a><a href="#" class="footer_legal-link">Cookie Settings</a></div></div></div></div></div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+const RESOURCES = { 'digital-literacy':true, 'cybersecurity':true, 'public-health':true, 'policy-advocacy':true, 'esg':true };
+
+function showResource() {
+  const id = location.hash.replace('#','');
+  const target = RESOURCES[id] ? id : 'digital-literacy';
+  document.querySelectorAll('.rd-section').forEach(s => s.style.display = 'none');
+  const el = document.getElementById(target);
+  if (el) {
+    el.style.display = 'block';
+    const title = el.querySelector('.rd-hero__title');
+    if (title) document.title = title.textContent.trim() + ' — FARO Foundation';
+  }
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', showResource);
+showResource();
+
+function handleFooterSubmit(e) { e.preventDefault(); document.getElementById('footer-success').style.display='block'; }
+</script>
+</body>
+</html>
