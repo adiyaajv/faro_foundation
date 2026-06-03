@@ -1505,6 +1505,27 @@ button { font-family: inherit; }
     box-shadow: none;
   }
 
+  /* Solid white navbar on mobile so the logo + hamburger stay legible
+     (the home hero no longer sits directly behind the transparent bar). */
+  .navbar_component { background: var(--pearl); border-bottom-color: var(--border); }
+  .menu-icon1_line-top,
+  .menu-icon1_line-middle,
+  .menu-icon1_line-bottom { background: var(--dark-blue); }
+
+  /* Hero on mobile: show the full graphic as a banner, then stack the
+     headline + buttons below it on the blue background — no text overlap. */
+  .gf-hero { min-height: 0; flex-direction: column; align-items: stretch; }
+  .gf-hero__bg {
+    position: relative; inset: auto;
+    width: 100%; aspect-ratio: 1672 / 941;
+    background-size: cover; background-position: center;
+  }
+  .gf-hero__bg::after { display: none; }
+  .gf-hero__content { padding-top: 1.75rem; padding-bottom: 2.5rem; }
+  .gf-hero__headline { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 18px; }
+  .gf-hero__actions { flex-direction: column; align-items: stretch; width: 100%; }
+  .btn-impact-hero, .btn-donate-hero { width: 100%; justify-content: center; text-align: center; }
+
   .section_hero { margin-left: 0.5rem; margin-right: 0.5rem; }
   .hero_cols { grid-template-columns: 1fr; }
   .hero-title { font-size: clamp(3rem, 20vw, 7rem); }
